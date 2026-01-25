@@ -12,25 +12,25 @@ See: .planning/PROJECT.md (updated 2025-01-25)
 Phase: 1 of 4 (Foundation & Discovery)
 Plan: 4 of 5 in current phase
 Status: In progress
-Last activity: 2026-01-26 - Completed 01-04-PLAN.md
+Last activity: 2026-01-26 - Completed 01-03-PLAN.md
 
 Progress: [####......] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 3 min
-- Total execution time: 9 min
+- Total execution time: 12 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation & Discovery | 3/5 | 9 min | 3 min |
+| 1. Foundation & Discovery | 4/5 | 12 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3 min), 01-02 (4 min), 01-04 (2 min)
+- Last 5 plans: 01-01 (3 min), 01-02 (4 min), 01-03 (3 min), 01-04 (2 min)
 - Trend: Consistent pace
 
 *Updated after each plan completion*
@@ -52,6 +52,9 @@ Recent decisions affecting current work:
 | suppressErrors in fast-glob | 01-02 | Graceful permission error handling without crashes |
 | ConfigError class | 01-04 | Descriptive validation errors with file path context |
 | Logger identity functions | 01-04 | Cleaner no-color mode without conditional calls |
+| Extension-first binary detection | 01-03 | Performance optimization - check extension before content |
+| Short-circuit filter evaluation | 01-03 | Stop at first exclusion for efficiency |
+| Filter exclusion tracking | 01-03 | Record which filter excluded each file for debugging |
 
 ### Pending Todos
 
@@ -64,5 +67,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed 01-04-PLAN.md (Config loader and logger)
+Stopped at: Completed 01-03-PLAN.md (File filters)
 Resume file: None
