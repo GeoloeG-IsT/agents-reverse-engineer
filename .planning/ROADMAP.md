@@ -10,7 +10,7 @@ Agents Reverse delivers auto-updating codebase documentation for AI coding assis
 - Integer phases (1, 2, 3, 4): Planned milestone work
 - Decimal phases (e.g., 2.1): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Foundation & Discovery** - Identify which files to analyze, exclude noise
+- [x] **Phase 1: Foundation & Discovery** - Identify which files to analyze, exclude noise
 - [ ] **Phase 2: Documentation Generation** - Produce .sum files and AGENTS.md hierarchy
 - [ ] **Phase 3: Incremental Updates** - Update only changed files via git diff detection
 - [ ] **Phase 4: Integration & Commands** - Commands, hooks, and multi-tool support
@@ -29,11 +29,11 @@ Agents Reverse delivers auto-updating codebase documentation for AI coding assis
 **Plans**: 5 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Initialize TypeScript project and config schema
-- [ ] 01-02-PLAN.md - Create discovery types and directory walker
-- [ ] 01-03-PLAN.md - Implement file filters (gitignore, binary, vendor, custom)
-- [ ] 01-04-PLAN.md - Create config loader and terminal logger
-- [ ] 01-05-PLAN.md - Create CLI commands (init, discover)
+- [x] 01-01-PLAN.md - Initialize TypeScript project and config schema
+- [x] 01-02-PLAN.md - Create discovery types and directory walker
+- [x] 01-03-PLAN.md - Implement file filters (gitignore, binary, vendor, custom)
+- [x] 01-04-PLAN.md - Create config loader and terminal logger
+- [x] 01-05-PLAN.md - Create CLI commands (init, discover)
 
 ### Phase 2: Documentation Generation
 **Goal**: Users get complete documentation hierarchy from file summaries to root AGENTS.md
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Discovery | 0/5 | Planned | - |
+| 1. Foundation & Discovery | 5/5 | ✓ Complete | 2026-01-26 |
 | 2. Documentation Generation | 0/TBD | Not started | - |
 | 3. Incremental Updates | 0/TBD | Not started | - |
 | 4. Integration & Commands | 0/TBD | Not started | - |
@@ -93,5 +93,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 ---
 *Roadmap created: 2025-01-25*
 *Phase 1 planned: 2025-01-25*
+*Phase 1 complete: 2026-01-26*
 *Depth: quick (3-5 phases)*
 *Total v1 requirements: 17*
