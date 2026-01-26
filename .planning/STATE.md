@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-25)
 
 **Core value:** Documentation that stays fresh automatically via git-diff-based updates
-**Current focus:** Phase 3 - Incremental Updates (COMPLETE)
+**Current focus:** Phase 4 - Integration & Commands
 
 ## Current Position
 
-Phase: 3 of 4 (Incremental Updates)
-Plan: 5 of 5 in current phase
-Status: Phase complete
-Last activity: 2026-01-26 - Completed 03-05-PLAN.md
+Phase: 4 of 4 (Integration & Commands)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-01-26 - Completed 04-01-PLAN.md
 
-Progress: [████████████████] 100%
+Progress: [█████████████████░░░] 85%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
+- Total plans completed: 17
 - Average duration: 3 min
-- Total execution time: 47 min
+- Total execution time: 50 min
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [████████████████] 100%
 | 1. Foundation & Discovery | 5/5 | 15 min | 3 min |
 | 2. Documentation Generation | 6/6 | 21 min | 4 min |
 | 3. Incremental Updates | 5/5 | 11 min | 2 min |
+| 4. Integration & Commands | 1/4 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (2 min), 03-02 (2 min), 03-03 (1 min), 03-04 (2 min), 03-05 (4 min)
+- Last 5 plans: 03-02 (2 min), 03-03 (1 min), 03-04 (2 min), 03-05 (4 min), 04-01 (3 min)
 - Trend: Consistent pace
 
 *Updated after each plan completion*
@@ -92,6 +93,10 @@ Recent decisions affecting current work:
 | Content hash verification | 03-04 | Skip files unchanged since last analysis via hash comparison |
 | Dry run propagation | 03-04 | Dry run support flows through all workflow operations |
 | Verbose console direct output | 03-05 | Logger lacks verbose method, use console.log with flag check |
+| Detect Claude via .claude/ OR CLAUDE.md | 04-01 | Projects may have CLAUDE.md without .claude/ directory |
+| Return array of environments | 04-01 | Projects can have multiple AI assistants installed |
+| CommonJS for hook template | 04-01 | Hooks run via node directly, not through build system |
+| YAML frontmatter in templates | 04-01 | Match Claude Code's expected command file format |
 
 ### Pending Todos
 
@@ -104,16 +109,13 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed 03-05-PLAN.md (CLI update command)
+Stopped at: Completed 04-01-PLAN.md (Integration infrastructure)
 Resume file: None
 
-## Phase 3 Complete
+## Phase 4 Progress
 
-Phase 3 (Incremental Updates) complete:
-- 03-01: State database layer (complete)
-- 03-02: Change detection (complete)
-- 03-03: Orphan cleanup (complete)
-- 03-04: Update orchestrator (complete)
-- 03-05: CLI update command (complete)
-
-Ready for Phase 4 (Polish & Documentation).
+Phase 4 (Integration & Commands) in progress:
+- 04-01: Integration infrastructure (complete)
+- 04-02: Init command integration (pending)
+- 04-03: Session hooks (pending)
+- 04-04: Polish and documentation (pending)
