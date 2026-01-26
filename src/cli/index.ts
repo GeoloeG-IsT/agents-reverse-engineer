@@ -5,10 +5,12 @@
  * Commands:
  *   init              Create default configuration
  *   discover [path]   Discover files to analyze
+ *   generate [path]   Generate documentation plan
  */
 
 import { initCommand, type InitOptions } from './init.js';
 import { discoverCommand, type DiscoverOptions } from './discover.js';
+import { generateCommand, type GenerateOptions } from './generate.js';
 
 const USAGE = `
 agents-reverse - AI-friendly codebase documentation
@@ -16,16 +18,21 @@ agents-reverse - AI-friendly codebase documentation
 Commands:
   init              Create default configuration
   discover [path]   Discover files to analyze (default: current directory)
+  generate [path]   Generate documentation plan (default: current directory)
 
 Options:
   --quiet, -q       Suppress output except errors
-  --show-excluded   List each excluded file
+  --verbose, -v     Show detailed output
+  --show-excluded   List each excluded file (discover only)
+  --dry-run         Show plan without writing files (generate only)
+  --budget <n>      Override token budget (generate only)
   --help, -h        Show this help
 
 Examples:
   ar init
   ar discover
-  ar discover ./my-project --quiet
+  ar generate --dry-run
+  ar generate ./my-project --budget 50000
 `;
 
 /**
@@ -38,17 +45,26 @@ function parseArgs(args: string[]): {
   command: string | undefined;
   positional: string[];
   flags: Set<string>;
+  values: Map<string, string>;
 } {
   let command: string | undefined;
   const positional: string[] = [];
   const flags = new Set<string>();
+  const values = new Map<string, string>();
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg.startsWith('--')) {
-      flags.add(arg.slice(2));
+      const flagName = arg.slice(2);
+      // Check if next arg is a value (not starting with -)
+      if (i + 1 < args.length && !args[i + 1].startsWith('-')) {
+        values.set(flagName, args[i + 1]);
+        i++; // Skip the value
+      } else {
+        flags.add(flagName);
+      }
     } else if (arg.startsWith('-')) {
-      // Handle short flags (e.g., -q, -h)
+      // Handle short flags (e.g., -q, -h, -v)
       for (const char of arg.slice(1)) {
         switch (char) {
           case 'q':
@@ -56,6 +72,9 @@ function parseArgs(args: string[]): {
             break;
           case 'h':
             flags.add('help');
+            break;
+          case 'v':
+            flags.add('verbose');
             break;
           default:
             // Unknown short flag - ignore
@@ -71,7 +90,7 @@ function parseArgs(args: string[]): {
     }
   }
 
-  return { command, positional, flags };
+  return { command, positional, flags, values };
 }
 
 /**
@@ -96,7 +115,7 @@ function showUnknownCommand(command: string): void {
  */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  const { command, positional, flags } = parseArgs(args);
+  const { command, positional, flags, values } = parseArgs(args);
 
   // Handle help flag anywhere
   if (flags.has('help') || args.length === 0) {
@@ -120,6 +139,17 @@ async function main(): Promise<void> {
         verbose: !flags.has('quiet'),
       };
       await discoverCommand(positional[0] || '.', options);
+      break;
+    }
+
+    case 'generate': {
+      const options: GenerateOptions = {
+        quiet: flags.has('quiet'),
+        verbose: flags.has('verbose'),
+        dryRun: flags.has('dry-run'),
+        budget: values.has('budget') ? parseInt(values.get('budget')!, 10) : undefined,
+      };
+      await generateCommand(positional[0] || '.', options);
       break;
     }
 
