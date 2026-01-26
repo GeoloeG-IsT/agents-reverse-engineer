@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2025-01-25)
 ## Current Position
 
 Phase: 3 of 4 (Incremental Updates)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-01-26 - Completed 03-01-PLAN.md
+Last activity: 2026-01-26 - Completed 03-02-PLAN.md
 
-Progress: [████████████░░░] 80%
+Progress: [█████████████░░] 87%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Average duration: 3 min
-- Total execution time: 38 min
+- Total execution time: 40 min
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [████████████░░░] 80%
 |-------|-------|-------|----------|
 | 1. Foundation & Discovery | 5/5 | 15 min | 3 min |
 | 2. Documentation Generation | 6/6 | 21 min | 4 min |
-| 3. Incremental Updates | 1/3 | 2 min | 2 min |
+| 3. Incremental Updates | 2/3 | 4 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (4 min), 02-04 (3 min), 02-05 (3 min), 02-06 (5 min), 03-01 (2 min)
+- Last 5 plans: 02-04 (3 min), 02-05 (3 min), 02-06 (5 min), 03-01 (2 min), 03-02 (2 min)
 - Trend: Consistent pace
 
 *Updated after each plan completion*
@@ -83,6 +83,9 @@ Recent decisions affecting current work:
 | user_version pragma migrations | 03-01 | SQLite's built-in schema versioning mechanism |
 | Prepared statements at open | 03-01 | Create statements once for maximum performance |
 | UPSERT pattern for files | 03-01 | Atomic upserts without read-then-write races |
+| simple-git diff with -M flag | 03-02 | Enables rename detection with 50% similarity threshold |
+| SHA-256 via Node.js crypto | 03-02 | Hardware-accelerated, hex-encoded output for content hashing |
+| Duplicate prevention in uncommitted | 03-02 | Check existing changes array before adding uncommitted files |
 
 ### Pending Todos
 
@@ -95,12 +98,12 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-26
-Stopped at: Completed 03-01-PLAN.md (state database layer)
+Stopped at: Completed 03-02-PLAN.md (change detection)
 Resume file: None
 
 ## Phase 3 Progress
 
 Phase 3 (Incremental Updates) in progress:
 - 03-01: State database layer (complete)
-- 03-02: Change detection (pending)
+- 03-02: Change detection (complete)
 - 03-03: Update orchestration (pending)
