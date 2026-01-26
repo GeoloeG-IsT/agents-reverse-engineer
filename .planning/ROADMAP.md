@@ -11,7 +11,7 @@ Agents Reverse delivers auto-updating codebase documentation for AI coding assis
 - Decimal phases (e.g., 2.1): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Foundation & Discovery** - Identify which files to analyze, exclude noise
-- [ ] **Phase 2: Documentation Generation** - Produce .sum files and AGENTS.md hierarchy
+- [x] **Phase 2: Documentation Generation** - Produce .sum files and AGENTS.md hierarchy
 - [ ] **Phase 3: Incremental Updates** - Update only changed files via git diff detection
 - [ ] **Phase 4: Integration & Commands** - Commands, hooks, and multi-tool support
 
@@ -53,7 +53,7 @@ Plans:
 - [x] 02-03-PLAN.md - Create file-type-specific prompt templates
 - [x] 02-04-PLAN.md - Create documentation writers (.sum, AGENTS.md, CLAUDE.md)
 - [x] 02-05-PLAN.md - Create supplementary docs (ARCHITECTURE.md, STACK.md)
-- [ ] 02-06-PLAN.md - Create CLI generate command and orchestrator
+- [x] 02-06-PLAN.md - Create CLI generate command and orchestrator
 
 ### Phase 3: Incremental Updates
 **Goal**: Users can update documentation incrementally based on what changed since last run
@@ -91,7 +91,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Discovery | 5/5 | ✓ Complete | 2026-01-26 |
-| 2. Documentation Generation | 5/6 | In progress | - |
+| 2. Documentation Generation | 6/6 | ✓ Complete | 2026-01-26 |
 | 3. Incremental Updates | 0/TBD | Not started | - |
 | 4. Integration & Commands | 0/TBD | Not started | - |
 
@@ -100,5 +100,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 *Phase 1 planned: 2025-01-25*
 *Phase 1 complete: 2026-01-26*
 *Phase 2 planned: 2026-01-26*
+*Phase 2 complete: 2026-01-26*
 *Depth: quick (3-5 phases)*
 *Total v1 requirements: 17*

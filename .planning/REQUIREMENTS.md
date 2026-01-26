@@ -14,11 +14,11 @@
 
 ### Documentation Generation
 
-- [ ] **GEN-01**: Generate `.sum` summary file for each analyzed source file
-- [ ] **GEN-02**: Generate `AGENTS.md` file in each directory describing contents and sub-structure
-- [ ] **GEN-03**: Generate `CLAUDE.md` at project root as pointer to AGENTS.md
-- [ ] **GEN-04**: Enforce token budgets to prevent cost explosion on large repos
-- [ ] **GEN-05**: Generate content-driven supplementary docs (ARCHITECTURE.md, STACK.md) when relevant
+- [x] **GEN-01**: Generate `.sum` summary file for each analyzed source file
+- [x] **GEN-02**: Generate `AGENTS.md` file in each directory describing contents and sub-structure
+- [x] **GEN-03**: Generate `CLAUDE.md` at project root as pointer to AGENTS.md
+- [x] **GEN-04**: Enforce token budgets to prevent cost explosion on large repos
+- [x] **GEN-05**: Generate content-driven supplementary docs (ARCHITECTURE.md, STACK.md) when relevant
 
 ### Incremental Updates
 
@@ -73,11 +73,11 @@
 | DISC-02 | Phase 1 | Complete |
 | DISC-03 | Phase 1 | Complete |
 | DISC-04 | Phase 1 | Complete |
-| GEN-01 | Phase 2 | Pending |
-| GEN-02 | Phase 2 | Pending |
-| GEN-03 | Phase 2 | Pending |
-| GEN-04 | Phase 2 | Pending |
-| GEN-05 | Phase 2 | Pending |
+| GEN-01 | Phase 2 | Complete |
+| GEN-02 | Phase 2 | Complete |
+| GEN-03 | Phase 2 | Complete |
+| GEN-04 | Phase 2 | Complete |
+| GEN-05 | Phase 2 | Complete |
 | UPD-01 | Phase 3 | Pending |
 | UPD-02 | Phase 3 | Pending |
 | UPD-03 | Phase 3 | Pending |
@@ -94,4 +94,4 @@
 
 ---
 *Requirements defined: 2025-01-25*
-*Last updated: 2026-01-26 after Phase 1 completion*
+*Last updated: 2026-01-26 after Phase 2 completion*
