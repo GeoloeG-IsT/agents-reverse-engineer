@@ -20,3 +20,13 @@ export {
   writeClaudeMd,
   getClaudeMdContent,
 } from './claude-md.js';
+
+export {
+  writeArchitectureMd,
+  writeStackMd,
+  buildArchitectureMd,
+  buildStackMd,
+  analyzePackageJson,
+  type SupplementaryConfig,
+  type StackInfo,
+} from './supplementary.js';
