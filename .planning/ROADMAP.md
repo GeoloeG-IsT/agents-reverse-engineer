@@ -82,10 +82,13 @@ Plans:
   2. User can run /ar:update in Claude Code to incrementally update changed files
   3. End-of-session hook automatically triggers update when session ends
   4. Tool works in other AI coding assistants (OpenCode, etc.) via compatible integration
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md - Create integration infrastructure (types, detection, templates)
+- [ ] 04-02-PLAN.md - Create init --integration command
+- [ ] 04-03-PLAN.md - Create Claude Code command files and hook
+- [ ] 04-04-PLAN.md - Create OpenCode integration and verify all commands
 
 ## Progress
 
@@ -97,7 +100,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 1. Foundation & Discovery | 5/5 | ✓ Complete | 2026-01-26 |
 | 2. Documentation Generation | 6/6 | ✓ Complete | 2026-01-26 |
 | 3. Incremental Updates | 5/5 | ✓ Complete | 2026-01-26 |
-| 4. Integration & Commands | 0/TBD | Not started | - |
+| 4. Integration & Commands | 0/4 | Planned | - |
 
 ---
 *Roadmap created: 2025-01-25*
@@ -107,5 +110,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 *Phase 2 complete: 2026-01-26*
 *Phase 3 planned: 2026-01-26*
 *Phase 3 complete: 2026-01-26*
+*Phase 4 planned: 2026-01-26*
 *Depth: quick (3-5 phases)*
 *Total v1 requirements: 17*
