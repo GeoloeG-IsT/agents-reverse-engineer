@@ -5,7 +5,7 @@ agent: build
 
 Generate comprehensive documentation for this codebase using agents-reverse.
 
-Run: `ar generate $ARGUMENTS`
+Run: `npx agents-reverse generate $ARGUMENTS`
 
 Arguments supported:
 - `--budget N` - Override token budget

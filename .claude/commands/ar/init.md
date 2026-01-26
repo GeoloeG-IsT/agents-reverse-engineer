@@ -10,7 +10,7 @@ Initialize agents-reverse in this project.
 Run the agents-reverse init command:
 
 ```bash
-ar init $ARGUMENTS
+npx agents-reverse init $ARGUMENTS
 ```
 
 This creates:

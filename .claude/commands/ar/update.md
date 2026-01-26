@@ -10,7 +10,7 @@ Update documentation for files that changed since last run.
 Run the agents-reverse update command:
 
 ```bash
-ar update $ARGUMENTS
+npx agents-reverse update $ARGUMENTS
 ```
 
 After completion, summarize:

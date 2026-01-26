@@ -10,7 +10,7 @@ Generate comprehensive documentation for this codebase using agents-reverse.
 Run the agents-reverse generate command:
 
 ```bash
-ar generate $ARGUMENTS
+npx agents-reverse generate $ARGUMENTS
 ```
 
 After completion, summarize:

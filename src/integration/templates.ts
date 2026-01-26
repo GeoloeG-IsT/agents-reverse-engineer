@@ -33,7 +33,7 @@ Generate comprehensive documentation for this codebase using agents-reverse.
 Run the agents-reverse generate command:
 
 \`\`\`bash
-ar generate $ARGUMENTS
+npx agents-reverse generate $ARGUMENTS
 \`\`\`
 
 After completion, summarize:
@@ -61,7 +61,7 @@ Update documentation for files that changed since last run.
 Run the agents-reverse update command:
 
 \`\`\`bash
-ar update $ARGUMENTS
+npx agents-reverse update $ARGUMENTS
 \`\`\`
 
 After completion, summarize:
@@ -88,7 +88,7 @@ Initialize agents-reverse in this project.
 Run the agents-reverse init command:
 
 \`\`\`bash
-ar init $ARGUMENTS
+npx agents-reverse init $ARGUMENTS
 \`\`\`
 
 This creates:
@@ -121,7 +121,7 @@ agent: build
 
 Generate comprehensive documentation for this codebase using agents-reverse.
 
-Run: \`ar generate $ARGUMENTS\`
+Run: \`npx agents-reverse generate $ARGUMENTS\`
 
 Arguments supported:
 - \`--budget N\` - Override token budget
@@ -139,7 +139,7 @@ agent: build
 
 Update documentation for files that changed since last run.
 
-Run: \`ar update $ARGUMENTS\`
+Run: \`npx agents-reverse update $ARGUMENTS\`
 
 Arguments supported:
 - \`--uncommitted\` - Include staged but uncommitted changes
@@ -198,7 +198,7 @@ try {
 }
 
 // Run update in background (don't block session close)
-const child = spawn('ar', ['update', '--quiet'], {
+const child = spawn('npx', ['agents-reverse', 'update', '--quiet'], {
   stdio: 'ignore',
   detached: true,
 });

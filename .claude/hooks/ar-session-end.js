@@ -44,18 +44,17 @@ try {
   process.exit(0);
 }
 
-// Check if ar CLI is available
+// Check if npx is available
 try {
-  execSync('which ar', { encoding: 'utf-8', timeout: 2000 });
+  execSync('which npx', { encoding: 'utf-8', timeout: 2000 });
 } catch {
-  // ar CLI not in PATH - exit silently
-  // User hasn't installed agents-reverse globally
+  // npx not in PATH - exit silently
   process.exit(0);
 }
 
 // Run update in background (don't block session close)
 try {
-  const child = spawn('ar', ['update', '--quiet'], {
+  const child = spawn('npx', ['agents-reverse', 'update', '--quiet'], {
     stdio: 'ignore',
     detached: true,
   });

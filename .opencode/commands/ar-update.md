@@ -5,7 +5,7 @@ agent: build
 
 Update documentation for files that changed since last run.
 
-Run: `ar update $ARGUMENTS`
+Run: `npx agents-reverse update $ARGUMENTS`
 
 Arguments supported:
 - `--uncommitted` - Include staged but uncommitted changes
