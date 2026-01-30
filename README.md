@@ -1,6 +1,6 @@
 <div align="center">
 
-# AGENTS REVERSE ENGINEER
+# AGENTS REVERSE ENGINEER (ARE)
 
 ## WE + ARE = GENIUS
 
