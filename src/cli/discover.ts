@@ -6,7 +6,7 @@
  */
 
 import path from 'node:path';
-import { access } from 'node:fs/promises';
+import { access, mkdir, writeFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { walkDirectory } from '../discovery/walker.js';
 import {
@@ -18,6 +18,9 @@ import {
 } from '../discovery/filters/index.js';
 import { loadConfig } from '../config/loader.js';
 import { createLogger, type Logger } from '../output/logger.js';
+import { createOrchestrator } from '../generation/orchestrator.js';
+import { buildExecutionPlan, formatExecutionPlanAsMarkdown } from '../generation/executor.js';
+import type { DiscoveryResult } from '../types/index.js';
 
 /**
  * Options for the discover command.
@@ -41,6 +44,12 @@ export interface DiscoverOptions {
    * @default true
    */
   verbose: boolean;
+
+  /**
+   * Generate GENERATION-PLAN.md file.
+   * @default false
+   */
+  plan: boolean;
 }
 
 /**
@@ -135,6 +144,41 @@ export async function discoverCommand(
 
   // Always show summary (unless quiet)
   logger.summary(result.included.length, result.excluded.length);
+
+  // Generate GENERATION-PLAN.md if --plan flag is set
+  if (options.plan) {
+    logger.info('');
+    logger.info('Generating execution plan...');
+
+    // Create discovery result for orchestrator
+    const discoveryResult: DiscoveryResult = {
+      files: result.included,
+      excluded: result.excluded.map(e => ({ path: e.path, reason: e.reason })),
+    };
+
+    // Create orchestrator and build generation plan
+    const orchestrator = createOrchestrator(config, resolvedPath, discoveryResult.files.length);
+    const generationPlan = await orchestrator.createPlan(discoveryResult);
+
+    // Build execution plan with post-order traversal
+    const executionPlan = buildExecutionPlan(generationPlan, resolvedPath);
+
+    // Format as markdown
+    const markdown = formatExecutionPlanAsMarkdown(executionPlan);
+
+    // Write to .agents-reverse-engineer/GENERATION-PLAN.md
+    const configDir = path.join(resolvedPath, '.agents-reverse-engineer');
+    const planPath = path.join(configDir, 'GENERATION-PLAN.md');
+
+    try {
+      await mkdir(configDir, { recursive: true });
+      await writeFile(planPath, markdown, 'utf8');
+      logger.info(`Created ${path.relative(resolvedPath, planPath)}`);
+    } catch (err) {
+      logger.error(`Failed to write plan: ${(err as Error).message}`);
+      process.exit(1);
+    }
+  }
 
   // Exit with code 0 on success
   process.exit(0);

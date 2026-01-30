@@ -41,12 +41,14 @@
     "agents",
     "reverse-engineering"
   ],
-  "author": "",
+  "author": "GeoloeG-IsT",
   "license": "MIT",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "main": "dist/cli/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GeoloeG-IsT/agents-reverse-engineer.git"

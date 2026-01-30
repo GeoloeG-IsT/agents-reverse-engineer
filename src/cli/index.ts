@@ -27,6 +27,7 @@ Options:
   --quiet, -q       Suppress output except errors
   --verbose, -v     Show detailed output
   --show-excluded   List each excluded file (discover only)
+  --plan            Generate GENERATION-PLAN.md file (discover only)
   --dry-run         Show plan without writing files (generate, update)
   --budget <n>      Override token budget (generate, update)
   --execute         Output JSON execution plan for AI agents (generate)
@@ -39,6 +40,7 @@ Examples:
   are init
   are init --integration
   are discover
+  are discover --plan
   are generate --dry-run
   are generate --execute
   are generate ./my-project --budget 50000
@@ -149,6 +151,7 @@ async function main(): Promise<void> {
         quiet: flags.has('quiet'),
         showExcluded: flags.has('show-excluded'),
         verbose: !flags.has('quiet'),
+        plan: flags.has('plan'),
       };
       await discoverCommand(positional[0] || '.', options);
       break;

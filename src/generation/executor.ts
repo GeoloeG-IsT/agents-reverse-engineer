@@ -360,3 +360,102 @@ export function* streamTasks(plan: ExecutionPlan): Generator<string> {
 
   yield JSON.stringify({ phase: 'complete' });
 }
+
+/**
+ * Format execution plan as markdown for GENERATION-PLAN.md.
+ * Uses post-order traversal (deepest directories first).
+ */
+export function formatExecutionPlanAsMarkdown(plan: ExecutionPlan): string {
+  const lines: string[] = [];
+  const today = new Date().toISOString().split('T')[0];
+
+  // Header
+  lines.push('# Documentation Generation Plan');
+  lines.push('');
+  lines.push(`Generated: ${today}`);
+  lines.push(`Project: ${plan.projectRoot}`);
+  lines.push('');
+
+  // Summary
+  lines.push('## Summary');
+  lines.push('');
+  lines.push(`- **Total Tasks**: ${plan.tasks.length}`);
+  lines.push(`- **File Tasks**: ${plan.fileTasks.length}`);
+  lines.push(`- **Directory Tasks**: ${plan.directoryTasks.length}`);
+  lines.push(`- **Root Tasks**: ${plan.rootTasks.length}`);
+  lines.push('- **Traversal**: Post-order (children before parents)');
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+
+  // Phase 1: File Analysis
+  lines.push('## Phase 1: File Analysis (Post-Order Traversal)');
+  lines.push('');
+
+  // Group files by directory, use directory task order (already post-order)
+  const filesByDir: Record<string, string[]> = {};
+  for (const task of plan.fileTasks) {
+    const dir = task.path.includes('/')
+      ? task.path.substring(0, task.path.lastIndexOf('/'))
+      : '.';
+    if (!filesByDir[dir]) filesByDir[dir] = [];
+    filesByDir[dir].push(task.path);
+  }
+
+  // Output files grouped by directory in post-order (using directoryTasks order)
+  for (const dirTask of plan.directoryTasks) {
+    const dir = dirTask.path;
+    const files = filesByDir[dir] || [];
+    if (files.length > 0) {
+      const depth = dirTask.metadata.depth ?? 0;
+      lines.push(`### Depth ${depth}: ${dir}/ (${files.length} files)`);
+      for (const file of files) {
+        lines.push(`- [ ] \`${file}\``);
+      }
+      lines.push('');
+    }
+  }
+
+  lines.push('---');
+  lines.push('');
+
+  // Phase 2: Directory AGENTS.md
+  lines.push(`## Phase 2: Directory AGENTS.md (Post-Order Traversal, ${plan.directoryTasks.length} directories)`);
+  lines.push('');
+
+  // Group by depth
+  const dirsByDepth: Record<number, string[]> = {};
+  for (const task of plan.directoryTasks) {
+    const depth = task.metadata.depth ?? 0;
+    if (!dirsByDepth[depth]) dirsByDepth[depth] = [];
+    dirsByDepth[depth].push(task.path);
+  }
+
+  // Output in depth order (descending)
+  const depths = Object.keys(dirsByDepth).map(Number).sort((a, b) => b - a);
+  for (const depth of depths) {
+    lines.push(`### Depth ${depth}`);
+    for (const dir of dirsByDepth[depth]) {
+      const suffix = dir === '.' ? ' (root)' : '';
+      lines.push(`- [ ] \`${dir}/AGENTS.md\`${suffix}`);
+    }
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('');
+
+  // Phase 3: Root Documents
+  lines.push('## Phase 3: Root Documents');
+  lines.push('');
+  lines.push('- [ ] `CLAUDE.md`');
+  if (plan.generateArchitecture) {
+    lines.push('- [ ] `ARCHITECTURE.md`');
+  }
+  if (plan.generateStack) {
+    lines.push('- [ ] `STACK.md`');
+  }
+  lines.push('');
+
+  return lines.join('\n');
+}
