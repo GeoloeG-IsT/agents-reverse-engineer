@@ -29,7 +29,7 @@ import type {
 } from './types.js';
 
 /** State directory name (relative to project root) */
-const STATE_DIR = '.agents-reverse';
+const STATE_DIR = '.agents-reverse-engineer';
 /** State database filename */
 const STATE_DB = 'state.db';
 

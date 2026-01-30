@@ -13,8 +13,8 @@ import { ZodError } from 'zod';
 import { ConfigSchema, Config } from './schema.js';
 import { DEFAULT_VENDOR_DIRS, DEFAULT_BINARY_EXTENSIONS, DEFAULT_MAX_FILE_SIZE } from './defaults.js';
 
-/** Directory name for agents-reverse configuration */
-export const CONFIG_DIR = '.agents-reverse';
+/** Directory name for agents-reverse-engineer configuration */
+export const CONFIG_DIR = '.agents-reverse-engineer';
 
 /** Configuration file name */
 export const CONFIG_FILE = 'config.yaml';

@@ -25,3 +25,6 @@ coverage/
 # Logs
 *.log
 npm-debug.log*
+
+# agents-reverse-engineer
+.agents-reverse-engineer/
