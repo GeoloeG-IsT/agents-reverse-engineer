@@ -2,6 +2,8 @@
 
 # AGENTS REVERSE ENGINEER
 
+## WE + ARE = GENIUS
+
 **Reverse engineer your codebase into AI-friendly documentation.**
 
 **Generate `.sum` files, `AGENTS.md`, and root docs for Claude Code, OpenCode, and any AI assistant that supports `AGENTS.md`.**
