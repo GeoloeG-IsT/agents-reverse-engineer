@@ -83,7 +83,7 @@ function formatPlan(plan: UpdatePlan, verbose: boolean): string {
 
   // Baseline info
   if (plan.isFirstRun) {
-    lines.push(pc.yellow('First run detected. Use "ar generate" for initial documentation.'));
+    lines.push(pc.yellow('First run detected. Use "are generate" for initial documentation.'));
     lines.push('');
   } else {
     lines.push(`Base commit: ${pc.dim(plan.baseCommit.slice(0, 7))}`);
@@ -297,8 +297,8 @@ export async function updateCommand(
 
     // Handle first run
     if (plan.isFirstRun) {
-      console.log(pc.yellow('Hint: Run "ar generate" first to create initial documentation.'));
-      console.log(pc.yellow('Then run "ar update" after making changes.'));
+      console.log(pc.yellow('Hint: Run "are generate" first to create initial documentation.'));
+      console.log(pc.yellow('Then run "are update" after making changes.'));
       return;
     }
 

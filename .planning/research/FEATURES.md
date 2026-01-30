@@ -107,7 +107,7 @@ Minimum viable product - what's needed to validate the concept.
 - [ ] **Per-directory AGENTS.md** - Hierarchical structure matching codebase
 - [ ] **Root CLAUDE.md pointer** - Anthropic compatibility from day 1
 - [ ] **Git-diff based updates** - The differentiator: only update changed files
-- [ ] **CLI with /ar:generate and /ar:update** - Two commands: full gen + incremental
+- [ ] **CLI with /are:generate and /are:update** - Two commands: full gen + incremental
 - [ ] **Token counting per file** - Essential for context management
 - [ ] **Gitignore respect + custom exclusions** - Don't document node_modules
 
@@ -143,7 +143,7 @@ Features to defer until product-market fit is established.
 | Root CLAUDE.md pointer | HIGH | LOW | P1 |
 | Token counting | MEDIUM | LOW | P1 |
 | Gitignore/exclusions | MEDIUM | LOW | P1 |
-| CLI commands (/ar:generate, /ar:update) | HIGH | LOW | P1 |
+| CLI commands (/are:generate, /are:update) | HIGH | LOW | P1 |
 | Session hooks | MEDIUM | MEDIUM | P2 |
 | Staleness warnings | MEDIUM | MEDIUM | P2 |
 | MCP server integration | MEDIUM | HIGH | P2 |

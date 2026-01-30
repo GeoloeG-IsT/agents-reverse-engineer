@@ -1,5 +1,5 @@
 ---
-name: ar:update
+name: are:update
 description: Incrementally update documentation for changed files
 argument-hint: "[--uncommitted] [--dry-run] [--verbose]"
 ---
@@ -7,10 +7,10 @@ argument-hint: "[--uncommitted] [--dry-run] [--verbose]"
 Update documentation for files that changed since last run.
 
 <execution>
-Run the agents-reverse update command:
+Run the agents-reverse-engineer update command:
 
 ```bash
-npx agents-reverse update $ARGUMENTS
+npx are update $ARGUMENTS
 ```
 
 After completion, summarize:

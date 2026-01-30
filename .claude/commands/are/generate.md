@@ -1,16 +1,16 @@
 ---
-name: ar:generate
+name: are:generate
 description: Generate AI-friendly documentation for the entire codebase
 argument-hint: "[--budget N] [--dry-run] [--verbose]"
 ---
 
-Generate comprehensive documentation for this codebase using agents-reverse.
+Generate comprehensive documentation for this codebase using agents-reverse-engineer.
 
 <execution>
-Run the agents-reverse generate command:
+Run the agents-reverse-engineer generate command:
 
 ```bash
-npx agents-reverse generate $ARGUMENTS
+npx are generate $ARGUMENTS
 ```
 
 After completion, summarize:

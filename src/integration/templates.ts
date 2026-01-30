@@ -12,7 +12,7 @@ import type { IntegrationTemplate } from './types.js';
  * Returns templates for:
  * - generate.md: Full documentation generation command
  * - update.md: Incremental documentation update command
- * - init.md: Initialize agents-reverse in a project
+ * - init.md: Initialize agents-reverse-engineer in a project
  *
  * @returns Array of Claude Code command templates
  */
@@ -20,20 +20,20 @@ export function getClaudeTemplates(): IntegrationTemplate[] {
   return [
     {
       filename: 'generate.md',
-      path: '.claude/commands/ar/generate.md',
+      path: '.claude/commands/are/generate.md',
       content: `---
-name: ar:generate
+name: are:generate
 description: Generate AI-friendly documentation for the entire codebase
 argument-hint: "[--budget N] [--dry-run] [--verbose]"
 ---
 
-Generate comprehensive documentation for this codebase using agents-reverse.
+Generate comprehensive documentation for this codebase using agents-reverse-engineer.
 
 <execution>
-Run the agents-reverse generate command:
+Run the agents-reverse-engineer generate command:
 
 \`\`\`bash
-npx agents-reverse generate $ARGUMENTS
+npx are generate $ARGUMENTS
 \`\`\`
 
 After completion, summarize:
@@ -48,9 +48,9 @@ If budget concerns arise, suggest \`--budget N\` to adjust.
     },
     {
       filename: 'update.md',
-      path: '.claude/commands/ar/update.md',
+      path: '.claude/commands/are/update.md',
       content: `---
-name: ar:update
+name: are:update
 description: Incrementally update documentation for changed files
 argument-hint: "[--uncommitted] [--dry-run] [--verbose]"
 ---
@@ -58,10 +58,10 @@ argument-hint: "[--uncommitted] [--dry-run] [--verbose]"
 Update documentation for files that changed since last run.
 
 <execution>
-Run the agents-reverse update command:
+Run the agents-reverse-engineer update command:
 
 \`\`\`bash
-npx agents-reverse update $ARGUMENTS
+npx are update $ARGUMENTS
 \`\`\`
 
 After completion, summarize:
@@ -75,24 +75,24 @@ Use \`--uncommitted\` to include staged but uncommitted changes.
     },
     {
       filename: 'init.md',
-      path: '.claude/commands/ar/init.md',
+      path: '.claude/commands/are/init.md',
       content: `---
-name: ar:init
-description: Initialize agents-reverse configuration and integration
+name: are:init
+description: Initialize agents-reverse-engineer configuration and integration
 argument-hint: "[--integration]"
 ---
 
-Initialize agents-reverse in this project.
+Initialize agents-reverse-engineer in this project.
 
 <execution>
-Run the agents-reverse init command:
+Run the agents-reverse-engineer init command:
 
 \`\`\`bash
-npx agents-reverse init $ARGUMENTS
+npx are init $ARGUMENTS
 \`\`\`
 
 This creates:
-- \`.agents-reverse.yaml\` configuration file
+- \`.agents-reverse-engineer.yaml\` configuration file
 - With \`--integration\`: command files for detected AI assistants
 </execution>
 `,
@@ -104,24 +104,24 @@ This creates:
  * Get OpenCode command file templates
  *
  * Returns templates for:
- * - ar-generate.md: Full documentation generation command
- * - ar-update.md: Incremental documentation update command
+ * - are-generate.md: Full documentation generation command
+ * - are-update.md: Incremental documentation update command
  *
  * @returns Array of OpenCode command templates
  */
 export function getOpenCodeTemplates(): IntegrationTemplate[] {
   return [
     {
-      filename: 'ar-generate.md',
-      path: '.opencode/commands/ar-generate.md',
+      filename: 'are-generate.md',
+      path: '.opencode/commands/are-generate.md',
       content: `---
 description: Generate AI-friendly documentation for the entire codebase
 agent: build
 ---
 
-Generate comprehensive documentation for this codebase using agents-reverse.
+Generate comprehensive documentation for this codebase using agents-reverse-engineer.
 
-Run: \`npx agents-reverse generate $ARGUMENTS\`
+Run: \`npx are generate $ARGUMENTS\`
 
 Arguments supported:
 - \`--budget N\` - Override token budget
@@ -130,8 +130,8 @@ Arguments supported:
 `,
     },
     {
-      filename: 'ar-update.md',
-      path: '.opencode/commands/ar-update.md',
+      filename: 'are-update.md',
+      path: '.opencode/commands/are-update.md',
       content: `---
 description: Incrementally update documentation for changed files
 agent: build
@@ -139,7 +139,7 @@ agent: build
 
 Update documentation for files that changed since last run.
 
-Run: \`npx agents-reverse update $ARGUMENTS\`
+Run: \`npx are update $ARGUMENTS\`
 
 Arguments supported:
 - \`--uncommitted\` - Include staged but uncommitted changes
@@ -154,10 +154,10 @@ Arguments supported:
  * Get session-end hook template for automatic documentation updates
  *
  * The hook:
- * - Checks AR_DISABLE_HOOK env var for temporary disable
+ * - Checks ARE_DISABLE_HOOK env var for temporary disable
  * - Checks config file for permanent disable (hook_enabled: false)
  * - Checks git status and exits silently if no changes
- * - Spawns ar update --quiet in background (detached, unref'd)
+ * - Spawns are update --quiet in background (detached, unref'd)
  *
  * Uses CommonJS (require) since hooks run via node directly.
  *
@@ -165,19 +165,19 @@ Arguments supported:
  */
 export function getHookTemplate(): string {
   return `#!/usr/bin/env node
-// .claude/hooks/ar-session-end.js
-// Triggers ar update when session ends (if there are uncommitted changes)
+// .claude/hooks/are-session-end.js
+// Triggers are update when session ends (if there are uncommitted changes)
 
 const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 
 // Check for disable flag
-if (process.env.AR_DISABLE_HOOK === '1') {
+if (process.env.ARE_DISABLE_HOOK === '1') {
   process.exit(0);
 }
 
 // Check config file for permanent disable
-const configPath = '.agents-reverse.yaml';
+const configPath = '.agents-reverse-engineer.yaml';
 if (fs.existsSync(configPath)) {
   const config = fs.readFileSync(configPath, 'utf-8');
   if (config.includes('hook_enabled: false')) {
@@ -198,7 +198,7 @@ try {
 }
 
 // Run update in background (don't block session close)
-const child = spawn('npx', ['agents-reverse', 'update', '--quiet'], {
+const child = spawn('npx', ['are', 'update', '--quiet'], {
   stdio: 'ignore',
   detached: true,
 });

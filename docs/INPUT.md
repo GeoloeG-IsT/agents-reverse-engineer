@@ -1,10 +1,10 @@
-# Agents Reverse:
+# Agents Reverse Engineer:
 
 A light-weight and powerful tool to reverse engineer a brownfield project and generate adequate AGENTS.md and CLAUDE.md among others... Compatible with Claude Code, OpenCode and many other agent tools.
 
 ## Inception
 
-Agents Reverse was born out of the need to streamline the process of documenting and understanding existing projects. It aims to provide agents with a clear and concise overview of their codebase, making it easier to maintain the project over time.
+Agents Reverse Engineer was born out of the need to streamline the process of documenting and understanding existing projects. It aims to provide agents with a clear and concise overview of their codebase, making it easier to maintain the project over time.
 It can be used in conjunction with other tools to enhance the overall development workflow like:
 - SpecKit: https://github.com/github/spec-kit
 - BMAD: https://github.com/bmad-code-org/BMAD-METHOD
@@ -33,9 +33,9 @@ Look at how they are approaching a brownfiled project, speical command and detai
 
 ## Usage
 
-To use Agents Reverse, simply run the following command in your terminal:
+To use Agents Reverse Engineer, simply run the following command in your terminal:
 
 ```bash
-/ar:generate
-/ar:update
+/are:generate
+/are:update
 ```

@@ -6,7 +6,7 @@
 <domain>
 ## Phase Boundary
 
-Slash commands (/ar:generate, /ar:update) and end-of-session hooks for AI coding assistants. Multi-tool support for any compatible assistant (Claude Code, OpenCode, etc.).
+Slash commands (/are:generate, /are:update) and end-of-session hooks for AI coding assistants. Multi-tool support for any compatible assistant (Claude Code, OpenCode, etc.).
 
 </domain>
 
@@ -14,7 +14,7 @@ Slash commands (/ar:generate, /ar:update) and end-of-session hooks for AI coding
 ## Implementation Decisions
 
 ### Command design
-- Command names: `/ar:generate` and `/ar:update` as specified in roadmap
+- Command names: `/are:generate` and `/are:update` as specified in roadmap
 - Show preview before analyzing large codebases (file count, estimated time, then ask to proceed)
 - Full CLI parity — support all CLI flags: --budget, --verbose, --dry-run, etc.
 - Markdown-optimized output format for AI assistant context (headers, bullets, code blocks)
@@ -23,12 +23,12 @@ Slash commands (/ar:generate, /ar:update) and end-of-session hooks for AI coding
 - Trigger on session close AND manual trigger available (both methods)
 - Show full error details if hook encounters errors during update
 - Pre-check git status, skip hook entirely if no changes since last update
-- Config toggle in `.agents-reverse.yaml` for permanent disable, `AR_DISABLE_HOOK=1` env var for temporary disable
+- Config toggle in `.agents-reverse.yaml` for permanent disable, `ARE_DISABLE_HOOK=1` env var for temporary disable
 
 ### Multi-tool support
 - Generic detection for any compatible AI assistant with slash commands
 - Detect environment via config file presence (`.claude/`, `.opencode/`, etc.)
-- `/ar:init` generates integration files for detected environment
+- `/are:init` generates integration files for detected environment
 - Generate integration files for ALL detected assistants (not just primary)
 
 ### User feedback

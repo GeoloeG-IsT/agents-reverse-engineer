@@ -3,9 +3,9 @@ description: Generate AI-friendly documentation for the entire codebase
 agent: build
 ---
 
-Generate comprehensive documentation for this codebase using agents-reverse.
+Generate comprehensive documentation for this codebase using agents-reverse-engineer.
 
-Run: `npx agents-reverse generate $ARGUMENTS`
+Run: `npx are generate $ARGUMENTS`
 
 Arguments supported:
 - `--budget N` - Override token budget

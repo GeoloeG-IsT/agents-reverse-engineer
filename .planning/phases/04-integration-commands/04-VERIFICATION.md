@@ -19,10 +19,10 @@ re_verification: false
 
 | # | Truth | Status | Evidence |
 |---|-------|--------|----------|
-| 1 | User can run /ar:generate in Claude Code to analyze entire project | ✓ VERIFIED | Command file exists at `.claude/commands/ar/generate.md` with valid frontmatter (name: ar:generate), calls `npx agents-reverse generate $ARGUMENTS` |
-| 2 | User can run /ar:update in Claude Code to incrementally update changed files | ✓ VERIFIED | Command file exists at `.claude/commands/ar/update.md` with valid frontmatter (name: ar:update), calls `npx agents-reverse update $ARGUMENTS` |
-| 3 | End-of-session hook automatically triggers update when session ends | ✓ VERIFIED | Hook exists at `.claude/hooks/ar-session-end.js` (65 lines), registered in `.claude/settings.json` SessionEnd, checks git status, spawns detached `npx agents-reverse update --quiet` |
-| 4 | Tool works in other AI coding assistants (OpenCode, etc.) via compatible integration | ✓ VERIFIED | OpenCode commands exist (`.opencode/commands/ar-generate.md`, `ar-update.md`), `ar init --integration` detects environments and generates files, templates module supports multiple formats |
+| 1 | User can run /are:generate in Claude Code to analyze entire project | ✓ VERIFIED | Command file exists at `.claude/commands/are/generate.md` with valid frontmatter (name: ar:generate), calls `npx agents-reverse generate $ARGUMENTS` |
+| 2 | User can run /are:update in Claude Code to incrementally update changed files | ✓ VERIFIED | Command file exists at `.claude/commands/are/update.md` with valid frontmatter (name: ar:update), calls `npx agents-reverse update $ARGUMENTS` |
+| 3 | End-of-session hook automatically triggers update when session ends | ✓ VERIFIED | Hook exists at `.claude/hooks/are-session-end.js` (65 lines), registered in `.claude/settings.json` SessionEnd, checks git status, spawns detached `npx agents-reverse update --quiet` |
+| 4 | Tool works in other AI coding assistants (OpenCode, etc.) via compatible integration | ✓ VERIFIED | OpenCode commands exist (`.opencode/commands/are-generate.md`, `are-update.md`), `ar init --integration` detects environments and generates files, templates module supports multiple formats |
 
 **Score:** 4/4 truths verified
 
@@ -36,22 +36,22 @@ re_verification: false
 | `src/integration/generate.ts` | Integration file generation logic | ✓ VERIFIED | 138 lines, generateIntegrationFiles writes files with skip-if-exists, ensureDir helper, built to dist/integration/generate.js |
 | `src/cli/init.ts` | Init command with --integration support | ✓ VERIFIED | 117 lines, InitOptions includes integration field, dynamic import of generate module (line 74), logs results |
 | `src/cli/index.ts` | CLI router with integration flag | ✓ VERIFIED | routes `--integration` flag to initCommand (line 138), documented in help/usage |
-| `.claude/commands/ar/generate.md` | /ar:generate slash command | ✓ VERIFIED | 24 lines, valid YAML frontmatter, calls `npx agents-reverse generate $ARGUMENTS`, execution instructions |
-| `.claude/commands/ar/update.md` | /ar:update slash command | ✓ VERIFIED | 23 lines, valid YAML frontmatter, calls `npx agents-reverse update $ARGUMENTS`, execution instructions |
-| `.claude/commands/ar/init.md` | /ar:init slash command | ✓ VERIFIED | 18 lines, valid YAML frontmatter, calls `npx agents-reverse init $ARGUMENTS` |
-| `.claude/hooks/ar-session-end.js` | SessionEnd hook for auto-updates | ✓ VERIFIED | 66 lines, executable, checks AR_DISABLE_HOOK env var, config file hook_enabled, git status, spawns detached update |
+| `.claude/commands/are/generate.md` | /are:generate slash command | ✓ VERIFIED | 24 lines, valid YAML frontmatter, calls `npx agents-reverse generate $ARGUMENTS`, execution instructions |
+| `.claude/commands/are/update.md` | /are:update slash command | ✓ VERIFIED | 23 lines, valid YAML frontmatter, calls `npx agents-reverse update $ARGUMENTS`, execution instructions |
+| `.claude/commands/are/init.md` | /are:init slash command | ✓ VERIFIED | 18 lines, valid YAML frontmatter, calls `npx agents-reverse init $ARGUMENTS` |
+| `.claude/hooks/are-session-end.js` | SessionEnd hook for auto-updates | ✓ VERIFIED | 66 lines, executable, checks ARE_DISABLE_HOOK env var, config file hook_enabled, git status, spawns detached update |
 | `.claude/settings.json` | Hook registration | ✓ VERIFIED | SessionEnd hook registered (line 13-21), uses $CLAUDE_PROJECT_DIR for path resolution |
-| `.opencode/commands/ar-generate.md` | /ar:generate for OpenCode | ✓ VERIFIED | 19 lines, OpenCode frontmatter (description, agent), calls `npx agents-reverse generate $ARGUMENTS` |
-| `.opencode/commands/ar-update.md` | /ar:update for OpenCode | ✓ VERIFIED | 19 lines, OpenCode frontmatter, calls `npx agents-reverse update $ARGUMENTS` |
+| `.opencode/commands/are-generate.md` | /are:generate for OpenCode | ✓ VERIFIED | 19 lines, OpenCode frontmatter (description, agent), calls `npx agents-reverse generate $ARGUMENTS` |
+| `.opencode/commands/are-update.md` | /are:update for OpenCode | ✓ VERIFIED | 19 lines, OpenCode frontmatter, calls `npx agents-reverse update $ARGUMENTS` |
 
 ### Key Link Verification
 
 | From | To | Via | Status | Details |
 |------|-----|-----|--------|---------|
-| `.claude/commands/ar/generate.md` | `npx agents-reverse generate` | bash command | ✓ WIRED | Command file contains `npx agents-reverse generate $ARGUMENTS` in execution block |
-| `.claude/commands/ar/update.md` | `npx agents-reverse update` | bash command | ✓ WIRED | Command file contains `npx agents-reverse update $ARGUMENTS` in execution block |
-| `.claude/hooks/ar-session-end.js` | git status check | pre-check | ✓ WIRED | Hook calls `execSync('git status --porcelain')` (line 33), exits if no changes |
-| `.claude/hooks/ar-session-end.js` | `npx agents-reverse update` | spawn detached | ✓ WIRED | Hook spawns `['npx', 'agents-reverse', 'update', '--quiet']` detached with unref (line 57-60) |
+| `.claude/commands/are/generate.md` | `npx agents-reverse generate` | bash command | ✓ WIRED | Command file contains `npx agents-reverse generate $ARGUMENTS` in execution block |
+| `.claude/commands/are/update.md` | `npx agents-reverse update` | bash command | ✓ WIRED | Command file contains `npx agents-reverse update $ARGUMENTS` in execution block |
+| `.claude/hooks/are-session-end.js` | git status check | pre-check | ✓ WIRED | Hook calls `execSync('git status --porcelain')` (line 33), exits if no changes |
+| `.claude/hooks/are-session-end.js` | `npx agents-reverse update` | spawn detached | ✓ WIRED | Hook spawns `['npx', 'agents-reverse', 'update', '--quiet']` detached with unref (line 57-60) |
 | `src/integration/generate.ts` | `src/integration/detect.ts` | detectEnvironments call | ✓ WIRED | generate.ts imports and calls detectEnvironments (line 66) |
 | `src/integration/generate.ts` | `src/integration/templates.ts` | template getters | ✓ WIRED | generate.ts imports getClaudeTemplates, getOpenCodeTemplates, getHookTemplate (line 12-16), calls via getTemplatesForEnvironment (line 76) |
 | `src/cli/init.ts` | `src/integration/generate.ts` | dynamic import | ✓ WIRED | init.ts dynamically imports generateIntegrationFiles when integration flag true (line 74) |
@@ -62,8 +62,8 @@ re_verification: false
 
 | Requirement | Status | Blocking Issue |
 |-------------|--------|----------------|
-| INT-01: /ar:generate command for Claude Code | ✓ SATISFIED | None - command file exists and wired |
-| INT-02: /ar:update command for Claude Code | ✓ SATISFIED | None - command file exists and wired |
+| INT-01: /are:generate command for Claude Code | ✓ SATISFIED | None - command file exists and wired |
+| INT-02: /are:update command for Claude Code | ✓ SATISFIED | None - command file exists and wired |
 | INT-03: SessionEnd hook integration | ✓ SATISFIED | None - hook exists, registered, checks git, spawns update |
 | INT-04: Multi-tool support (OpenCode) | ✓ SATISFIED | None - OpenCode commands exist, detection works, templates support multiple formats |
 
@@ -79,13 +79,13 @@ re_verification: false
 
 #### 1. Claude Code Command Autocomplete
 
-**Test:** In Claude Code, type `/ar:` and check autocomplete
-**Expected:** Should see /ar:generate, /ar:update, /ar:init in autocomplete list
+**Test:** In Claude Code, type `/are:` and check autocomplete
+**Expected:** Should see /are:generate, /are:update, /are:init in autocomplete list
 **Why human:** Requires Claude Code UI interaction to verify command registration
 
 #### 2. Command Execution (Dry Run)
 
-**Test:** Run `/ar:generate --dry-run` in Claude Code
+**Test:** Run `/are:generate --dry-run` in Claude Code
 **Expected:** Should execute and show discovery/generation plan without writing files
 **Why human:** Requires running command through Claude Code and observing behavior
 
@@ -103,7 +103,7 @@ re_verification: false
 
 #### 5. OpenCode Command Compatibility
 
-**Test:** In OpenCode environment, verify `/ar:generate` and `/ar:update` appear
+**Test:** In OpenCode environment, verify `/are:generate` and `/are:update` appear
 **Expected:** Commands should be available with OpenCode-style frontmatter
 **Why human:** Requires OpenCode installation and testing (not Claude Code)
 
@@ -184,7 +184,7 @@ All critical connections verified:
 
 The integration system is complete and functional:
 
-1. **Claude Code Integration:** /ar:generate, /ar:update, /ar:init commands exist with proper frontmatter and wiring to underlying CLI
+1. **Claude Code Integration:** /are:generate, /are:update, /are:init commands exist with proper frontmatter and wiring to underlying CLI
 2. **Automatic Updates:** SessionEnd hook registered, checks git status, spawns background update when changes exist
 3. **Multi-tool Support:** OpenCode commands exist with tool-specific frontmatter, detection framework supports multiple environments
 4. **CLI Integration:** `ar init --integration` flag detects environments and generates appropriate files

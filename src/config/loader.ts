@@ -100,7 +100,7 @@ export async function loadConfig(root: string): Promise<Config> {
  * @example
  * ```typescript
  * if (!await configExists('.')) {
- *   console.log('Run `ar init` to create configuration');
+ *   console.log('Run `are init` to create configuration');
  * }
  * ```
  */

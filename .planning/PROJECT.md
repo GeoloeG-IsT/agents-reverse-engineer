@@ -21,8 +21,8 @@ Documentation that stays fresh automatically. When code changes, docs update —
 - [ ] Generate `AGENTS.md` per directory describing contents and sub-structure
 - [ ] Generate `CLAUDE.md` as pointer to `AGENTS.md` for Anthropic compatibility
 - [ ] Content-driven supplementary docs (ARCHITECTURE.md, STACK.md, etc. when relevant)
-- [ ] `/ar:generate` command for full project analysis
-- [ ] `/ar:update` command for incremental updates
+- [ ] `/are:generate` command for full project analysis
+- [ ] `/are:update` command for incremental updates
 - [ ] End-of-session hook integration for automatic updates
 - [ ] Git diff-based change detection (track hash between runs)
 - [ ] Language agnostic analysis (LLM figures out the language)

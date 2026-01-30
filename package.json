@@ -1,11 +1,11 @@
 {
-  "name": "agents-reverse",
+  "name": "agents-reverse-engineer",
   "version": "0.1.0",
   "description": "CLI tool for reverse-engineering codebase documentation for AI agents",
   "type": "module",
   "bin": {
-    "agents-reverse": "dist/cli/index.js",
-    "ar": "dist/cli/index.js"
+    "agents-reverse-engineer": "dist/cli/index.js",
+    "are": "dist/cli/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -49,10 +49,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GeoloeG-IsT/agents-reverse.git"
+    "url": "git+https://github.com/GeoloeG-IsT/agents-reverse-engineer.git"
   },
   "bugs": {
-    "url": "https://github.com/GeoloeG-IsT/agents-reverse/issues"
+    "url": "https://github.com/GeoloeG-IsT/agents-reverse-engineer/issues"
   },
-  "homepage": "https://github.com/GeoloeG-IsT/agents-reverse#readme"
+  "homepage": "https://github.com/GeoloeG-IsT/agents-reverse-engineer#readme"
 }

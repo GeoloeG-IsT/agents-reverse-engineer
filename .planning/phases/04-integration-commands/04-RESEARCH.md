@@ -6,13 +6,13 @@
 
 ## Summary
 
-This phase implements slash command integration (`/ar:generate`, `/ar:update`) and end-of-session hooks for AI coding assistants. The primary targets are Claude Code (the primary environment) and OpenCode (secondary), with a generic pattern that can extend to other assistants like Aider and Continue.
+This phase implements slash command integration (`/are:generate`, `/are:update`) and end-of-session hooks for AI coding assistants. The primary targets are Claude Code (the primary environment) and OpenCode (secondary), with a generic pattern that can extend to other assistants like Aider and Continue.
 
 Claude Code uses markdown files in `.claude/commands/` with YAML frontmatter for custom slash commands, and a JSON-based hooks system in `.claude/settings.json` for lifecycle events including `SessionEnd`. OpenCode follows a similar pattern with markdown command files in `.opencode/commands/` and JSON agent configurations. Both systems share the conceptual model of markdown-defined commands with argument placeholders.
 
 The key architectural insight is that our slash commands are thin wrappers that call the existing CLI (`ar generate`, `ar update`). Commands should format output for markdown consumption (AI chat context) rather than terminal display, and hooks should be silent when nothing changed.
 
-**Primary recommendation:** Create markdown command files that call the CLI with appropriate flags, use SessionEnd hook with git status pre-check for auto-updates, and implement `/ar:init` to detect environment and generate appropriate integration files for all detected assistants.
+**Primary recommendation:** Create markdown command files that call the CLI with appropriate flags, use SessionEnd hook with git status pre-check for auto-updates, and implement `/are:init` to detect environment and generate appropriate integration files for all detected assistants.
 
 ## Standard Stack
 
@@ -43,17 +43,17 @@ This phase requires no new npm dependencies. Integration files are plain markdow
 .claude/                          # Claude Code integration
 ├── commands/
 │   └── ar/
-│       ├── generate.md          # /ar:generate command
-│       ├── update.md            # /ar:update command
-│       └── init.md              # /ar:init command
+│       ├── generate.md          # /are:generate command
+│       ├── update.md            # /are:update command
+│       └── init.md              # /are:init command
 ├── hooks/
-│   └── ar-session-end.js        # End-of-session hook script
+│   └── are-session-end.js        # End-of-session hook script
 └── settings.json                # Hook registration
 
 .opencode/                        # OpenCode integration
 ├── commands/
-│   ├── ar-generate.md           # /ar:generate command
-│   └── ar-update.md             # /ar:update command
+│   ├── are-generate.md           # /are:generate command
+│   └── are-update.md             # /are:update command
 └── agents/
     └── ar-docs.md               # Docs agent definition
 
@@ -103,14 +103,14 @@ If budget concerns arise, suggest `--budget N` to adjust.
 **Example:**
 ```javascript
 #!/usr/bin/env node
-// .claude/hooks/ar-session-end.js
+// .claude/hooks/are-session-end.js
 // Triggers ar update when session ends (if there are uncommitted changes)
 
 const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 
 // Check for disable flag
-if (process.env.AR_DISABLE_HOOK === '1') {
+if (process.env.ARE_DISABLE_HOOK === '1') {
   process.exit(0);
 }
 
@@ -165,7 +165,7 @@ Arguments supported:
 
 ### Pattern 4: Init Command with Environment Detection
 **What:** Detect AI assistant environment and generate appropriate integration files
-**When to use:** First-time setup via `/ar:init` or `ar init --integration`
+**When to use:** First-time setup via `/are:init` or `ar init --integration`
 **Example:**
 ```typescript
 // Source: Project design from CONTEXT.md
@@ -234,7 +234,7 @@ ${formatTypeDistribution(plan)}
     warnings: plan.skippedFiles.length > 0
       ? [`${plan.skippedFiles.length} files skipped due to budget constraints`]
       : undefined,
-    nextSteps: ['Review generated documentation', 'Run `/ar:update` after making changes'],
+    nextSteps: ['Review generated documentation', 'Run `/are:update` after making changes'],
   };
 }
 ```
@@ -334,7 +334,7 @@ ar generate $ARGUMENTS
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ar-session-end.js"
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/are-session-end.js"
           }
         ]
       }
@@ -411,7 +411,7 @@ async function checkStaleness(projectRoot: string): Promise<string | null> {
                        status.created.length;
 
   if (changedFiles >= STALE_THRESHOLD) {
-    return `Documentation may be stale: ${changedFiles} files changed since last update. Run \`/ar:update\` to refresh.`;
+    return `Documentation may be stale: ${changedFiles} files changed since last update. Run \`/are:update\` to refresh.`;
   }
 
   return null;

@@ -9,9 +9,9 @@ requires:
   - phase: 04-01
     provides: integration file generator and template system
 provides:
-  - /ar:generate slash command for Claude Code
-  - /ar:update slash command for Claude Code
-  - /ar:init slash command for Claude Code
+  - /are:generate slash command for Claude Code
+  - /are:update slash command for Claude Code
+  - /are:init slash command for Claude Code
   - SessionEnd hook for automatic doc updates
 affects: [04-04, user-onboarding]
 
@@ -24,10 +24,10 @@ tech-stack:
 
 key-files:
   created:
-    - .claude/commands/ar/generate.md
-    - .claude/commands/ar/update.md
-    - .claude/commands/ar/init.md
-    - .claude/hooks/ar-session-end.js
+    - .claude/commands/are/generate.md
+    - .claude/commands/are/update.md
+    - .claude/commands/are/init.md
+    - .claude/hooks/are-session-end.js
   modified:
     - .claude/settings.json
 
@@ -47,7 +47,7 @@ completed: 2026-01-26
 
 # Phase 04-03: Session Hooks Summary
 
-**Claude Code commands (/ar:generate, /ar:update, /ar:init) and SessionEnd hook for automatic documentation updates**
+**Claude Code commands (/are:generate, /are:update, /are:init) and SessionEnd hook for automatic documentation updates**
 
 ## Performance
 
@@ -74,10 +74,10 @@ Each task was committed atomically:
 **Plan metadata:** [pending] (docs: complete plan)
 
 ## Files Created/Modified
-- `.claude/commands/ar/generate.md` - /ar:generate slash command
-- `.claude/commands/ar/update.md` - /ar:update slash command
-- `.claude/commands/ar/init.md` - /ar:init slash command
-- `.claude/hooks/ar-session-end.js` - SessionEnd hook with git status check
+- `.claude/commands/are/generate.md` - /are:generate slash command
+- `.claude/commands/are/update.md` - /are:update slash command
+- `.claude/commands/are/init.md` - /are:init slash command
+- `.claude/hooks/are-session-end.js` - SessionEnd hook with git status check
 - `.claude/settings.json` - Added SessionEnd hook registration
 
 ## Decisions Made
@@ -100,7 +100,7 @@ None - no external service configuration required.
 
 ## Next Phase Readiness
 - All Claude Code integration files in place
-- Commands available: /ar:generate, /ar:update, /ar:init
+- Commands available: /are:generate, /are:update, /are:init
 - SessionEnd hook will auto-update docs when ar CLI is installed
 - Ready for 04-04: Polish and documentation
 

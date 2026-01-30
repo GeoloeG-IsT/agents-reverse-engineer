@@ -15,7 +15,7 @@ import { generateCommand, type GenerateOptions } from './generate.js';
 import { updateCommand, type UpdateCommandOptions } from './update.js';
 
 const USAGE = `
-agents-reverse - AI-friendly codebase documentation
+agents-reverse-engineer - AI-friendly codebase documentation
 
 Commands:
   init              Create default configuration
@@ -34,13 +34,13 @@ Options:
   --help, -h        Show this help
 
 Examples:
-  ar init
-  ar init --integration
-  ar discover
-  ar generate --dry-run
-  ar generate ./my-project --budget 50000
-  ar update
-  ar update --uncommitted --verbose
+  are init
+  are init --integration
+  are discover
+  are generate --dry-run
+  are generate ./my-project --budget 50000
+  are update
+  are update --uncommitted --verbose
 `;
 
 /**
@@ -114,7 +114,7 @@ function showHelp(): void {
  */
 function showUnknownCommand(command: string): void {
   console.error(`Unknown command: ${command}`);
-  console.error(`Run 'ar --help' for usage information.`);
+  console.error(`Run 'are --help' for usage information.`);
   process.exit(1);
 }
 

@@ -11,7 +11,7 @@ requires:
   - phase: 04-03
     provides: Claude Code commands and hooks
 provides:
-  - OpenCode integration files (/ar:generate, /ar:update)
+  - OpenCode integration files (/are:generate, /are:update)
   - Complete multi-tool AI assistant support
   - Verified working commands across environments
 affects: []
@@ -21,12 +21,12 @@ tech-stack:
   added: []
   patterns:
     - OpenCode YAML frontmatter (description, agent)
-    - Flat command file naming (ar-generate.md)
+    - Flat command file naming (are-generate.md)
 
 key-files:
   created:
-    - .opencode/commands/ar-generate.md
-    - .opencode/commands/ar-update.md
+    - .opencode/commands/are-generate.md
+    - .opencode/commands/are-update.md
   modified: []
 
 key-decisions:
@@ -55,7 +55,7 @@ completed: 2026-01-26
 - **Files modified:** 2
 
 ## Accomplishments
-- OpenCode /ar:generate and /ar:update commands created
+- OpenCode /are:generate and /are:update commands created
 - All Phase 4 integration requirements verified working
 - Multi-tool support complete (Claude Code + OpenCode)
 - Command collision fixed by switching to npx agents-reverse
@@ -71,12 +71,12 @@ Each task was committed atomically:
 **Plan metadata:** [pending] (docs: complete plan)
 
 ## Files Created/Modified
-- `.opencode/commands/ar-generate.md` - Generate command for OpenCode users
-- `.opencode/commands/ar-update.md` - Update command for OpenCode users
+- `.opencode/commands/are-generate.md` - Generate command for OpenCode users
+- `.opencode/commands/are-update.md` - Update command for OpenCode users
 
 ## Decisions Made
 - **npx agents-reverse instead of ar**: The `ar` command collides with the system archiver utility on Linux/macOS. Using `npx agents-reverse` ensures the tool works regardless of global installation status and avoids PATH conflicts.
-- **OpenCode flat naming**: OpenCode uses `ar-generate.md` format (not `ar/generate.md` like Claude Code) per OpenCode's command discovery conventions.
+- **OpenCode flat naming**: OpenCode uses `are-generate.md` format (not `ar/generate.md` like Claude Code) per OpenCode's command discovery conventions.
 
 ## Deviations from Plan
 
@@ -86,7 +86,7 @@ Each task was committed atomically:
 - **Found during:** Task 1 (testing commands)
 - **Issue:** `ar` command conflicts with system archiver utility
 - **Fix:** Changed all command files and hook to use `npx agents-reverse` instead of `ar`
-- **Files modified:** .claude/commands/ar/*.md, .claude/hooks/ar-session-end.js, .opencode/commands/ar-*.md
+- **Files modified:** .claude/commands/are/*.md, .claude/hooks/are-session-end.js, .opencode/commands/ar-*.md
 - **Verification:** Commands execute correctly without PATH conflicts
 - **Committed in:** 31a50d5
 
@@ -107,8 +107,8 @@ None - no external service configuration required.
   - Full generation: `npx agents-reverse generate`
   - Incremental updates: `npx agents-reverse update`
   - Integration setup: `npx agents-reverse init --integration`
-  - Claude Code commands: /ar:generate, /ar:update, /ar:init
-  - OpenCode commands: /ar:generate, /ar:update
+  - Claude Code commands: /are:generate, /are:update, /are:init
+  - OpenCode commands: /are:generate, /are:update
   - Automatic session-end updates via hook
 
 **Project complete** - all 17 v1 requirements delivered.

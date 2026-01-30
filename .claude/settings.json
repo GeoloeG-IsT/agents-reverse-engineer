@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ar-session-end.js"
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/are-session-end.js"
           }
         ]
       }

@@ -39,7 +39,7 @@ Research reveals that documentation freshness is the killer differentiator in th
 - Root CLAUDE.md pointer — Anthropic compatibility from day one
 - Token counting per file — essential for LLM context management
 - Gitignore respect + custom exclusions — don't document node_modules, build artifacts
-- CLI interface with /ar:generate and /ar:update — simple command surface
+- CLI interface with /are:generate and /are:update — simple command surface
 
 **Should have (competitive advantage):**
 - **Git-diff-based incremental updates** — THE differentiator; no competitor does this well; only update changed files
@@ -193,7 +193,7 @@ Based on research, suggested phase structure with clear dependency chain and ris
 - Selective regeneration (only changed files + affected directories)
 - Rename/move detection and handling
 - Orphan detection for stale AGENTS.md
-- Update command (/ar:update)
+- Update command (/are:update)
 
 **Features from FEATURES.md:**
 - Git-diff-based incremental updates (THE differentiator)

@@ -78,8 +78,8 @@ Plans:
 **Depends on**: Phase 3
 **Requirements**: INT-01, INT-02, INT-03, INT-04
 **Success Criteria** (what must be TRUE):
-  1. User can run /ar:generate in Claude Code to analyze entire project
-  2. User can run /ar:update in Claude Code to incrementally update changed files
+  1. User can run /are:generate in Claude Code to analyze entire project
+  2. User can run /are:update in Claude Code to incrementally update changed files
   3. End-of-session hook automatically triggers update when session ends
   4. Tool works in other AI coding assistants (OpenCode, etc.) via compatible integration
 **Plans**: 4 plans

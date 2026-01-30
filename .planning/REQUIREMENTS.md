@@ -29,8 +29,8 @@
 
 ### Integration
 
-- [x] **INT-01**: Provide `/ar:generate` command for full project analysis in Claude Code
-- [x] **INT-02**: Provide `/ar:update` command for incremental updates in Claude Code
+- [x] **INT-01**: Provide `/are:generate` command for full project analysis in Claude Code
+- [x] **INT-02**: Provide `/are:update` command for incremental updates in Claude Code
 - [x] **INT-03**: Integrate with Claude Code end-of-session hook for automatic updates
 - [x] **INT-04**: Support multi-tool integration (OpenCode and other AI coding assistants)
 

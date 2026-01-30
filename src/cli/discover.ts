@@ -1,5 +1,5 @@
 /**
- * `ar discover` command - Discover files to analyze
+ * `are discover` command - Discover files to analyze
  *
  * Walks a directory tree and applies filters (gitignore, vendor, binary, custom)
  * to identify files suitable for analysis.
@@ -44,7 +44,7 @@ export interface DiscoverOptions {
 }
 
 /**
- * Execute the `ar discover` command.
+ * Execute the `are discover` command.
  *
  * Discovers files in the target directory, applying all configured filters
  * (gitignore, vendor, binary, custom patterns).
