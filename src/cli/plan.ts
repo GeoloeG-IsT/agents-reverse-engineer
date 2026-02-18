@@ -17,6 +17,7 @@ import { findProjectRoot } from '../config/loader.js';
 import { loadConfig } from '../config/loader.js';
 import { createBackendRegistry, resolveBackend } from '../ai/registry.js';
 import { createLogger } from '../output/logger.js';
+import { safeTimestamp } from '../core/timestamp.js';
 import {
   slugify,
   createWorktreePair,
@@ -120,7 +121,7 @@ export async function planCommand(
   }
 
   const startTime = new Date().toISOString();
-  const comparisonId = startTime.replace(/[:.]/g, '-');
+  const comparisonId = safeTimestamp(new Date(startTime));
 
   // Render header
   renderHeader(task, model, backend.name, {

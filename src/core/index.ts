@@ -139,3 +139,6 @@ export {
   extractDirectoryImports,
   formatImportMap,
 } from '../imports/extractor.js';
+
+// === Utilities ===
+export { safeTimestamp } from './timestamp.js';

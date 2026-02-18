@@ -22,6 +22,7 @@ import type { FileHandle } from 'node:fs/promises';
 import * as path from 'node:path';
 import pc from 'picocolors';
 import type { RunSummary } from './types.js';
+import { safeTimestamp } from '../core/timestamp.js';
 
 // ---------------------------------------------------------------------------
 // ANSI stripping
@@ -90,8 +91,8 @@ export class ProgressLog {
     const safeCommand = command.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const safeBackend = backend.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const safeModel = model.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    const safeTimestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `progress-${safeCommand}-${safeBackend}-${safeModel}-${safeTimestamp}.log`;
+    const timestamp = safeTimestamp();
+    const filename = `progress-${safeCommand}-${safeBackend}-${safeModel}-${timestamp}.log`;
 
     const log = new ProgressLog(
       path.join(projectRoot, PROGRESS_DIR, filename),

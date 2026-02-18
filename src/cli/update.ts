@@ -13,6 +13,7 @@ import pc from 'picocolors';
 import { loadConfig, findProjectRoot } from '../config/loader.js';
 import { createLogger } from '../output/logger.js';
 import { consoleLogger } from '../core/logger.js';
+import { safeTimestamp } from '../core/timestamp.js';
 import {
   createUpdateOrchestrator,
   type UpdatePlan,
@@ -295,7 +296,7 @@ export async function updateCommand(
     if (options.trace) {
       const logDir = path.join(
         absolutePath, '.agents-reverse-engineer', 'subprocess-logs',
-        new Date().toISOString().replace(/[:.]/g, '-'),
+        safeTimestamp(),
       );
       aiService.setSubprocessLogDir(logDir);
       console.error(pc.dim(`[trace] Subprocess logs → ${logDir}`));

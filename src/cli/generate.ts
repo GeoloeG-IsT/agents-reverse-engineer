@@ -17,6 +17,7 @@ import pc from 'picocolors';
 import { loadConfig, findProjectRoot } from '../config/loader.js';
 import { createLogger } from '../output/logger.js';
 import { consoleLogger } from '../core/logger.js';
+import { safeTimestamp } from '../core/timestamp.js';
 import { discoverFiles } from '../discovery/run.js';
 import { createOrchestrator, type GenerationPlan } from '../orchestration/orchestrator.js';
 import { buildExecutionPlan } from '../generation/executor.js';
@@ -270,7 +271,7 @@ export async function generateCommand(
   if (options.trace) {
     const logDir = path.join(
       absolutePath, '.agents-reverse-engineer', 'subprocess-logs',
-      new Date().toISOString().replace(/[:.]/g, '-'),
+      safeTimestamp(),
     );
     aiService.setSubprocessLogDir(logDir);
     console.error(pc.dim(`[trace] Subprocess logs → ${logDir}`));

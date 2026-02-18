@@ -18,6 +18,7 @@ import { simpleGit } from 'simple-git';
 import { findProjectRoot, loadConfig } from '../config/loader.js';
 import { createBackendRegistry, resolveBackend } from '../ai/registry.js';
 import { createLogger } from '../output/logger.js';
+import { safeTimestamp } from '../core/timestamp.js';
 import {
   loadComparison as loadPlanById,
   loadPlanText,
@@ -149,6 +150,7 @@ export async function implementCommand(
   }
 
   const startTime = new Date().toISOString();
+  const comparisonId = safeTimestamp(new Date(startTime));
 
   // Render header
   renderHeader(task, model, backend.name, {
@@ -294,7 +296,6 @@ export async function implementCommand(
     };
 
     // Build comparison record
-    const comparisonId = startTime.replace(/[:.]/g, '-');
     const comparison: ImplementationComparison = {
       id: comparisonId,
       startTime,
