@@ -22,6 +22,9 @@
 export { nullLogger, consoleLogger } from './logger.js';
 export type { Logger } from './logger.js';
 
+// === Utilities ===
+export { safeTimestamp } from './utils.js';
+
 // === AI ===
 export { AIService } from '../ai/service.js';
 export type { AIServiceOptions } from '../ai/service.js';

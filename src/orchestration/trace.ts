@@ -15,6 +15,7 @@
 import { open, mkdir, readdir, unlink } from 'node:fs/promises';
 import type { FileHandle } from 'node:fs/promises';
 import * as path from 'node:path';
+import { safeTimestamp } from '../core/utils.js';
 
 // ---------------------------------------------------------------------------
 // Trace directory
@@ -296,8 +297,8 @@ class TraceWriter implements ITraceWriter {
  */
 export function createTraceWriter(projectRoot: string, enabled: boolean): ITraceWriter {
   if (!enabled) return new NullTraceWriter();
-  const safeTimestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const filePath = path.join(projectRoot, TRACES_DIR, `trace-${safeTimestamp}.ndjson`);
+  const timestamp = safeTimestamp();
+  const filePath = path.join(projectRoot, TRACES_DIR, `trace-${timestamp}.ndjson`);
   return new TraceWriter(filePath);
 }
 

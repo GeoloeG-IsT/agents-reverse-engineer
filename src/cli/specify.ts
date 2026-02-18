@@ -17,7 +17,7 @@ import { access, readdir } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import pc from 'picocolors';
 import { loadConfig, findProjectRoot } from '../config/loader.js';
-import { consoleLogger } from '../core/logger.js';
+import { consoleLogger, safeTimestamp } from '../core/index.js';
 import { collectAgentsDocs, collectAnnexFiles } from '../generation/collector.js';
 import { buildSpecPrompt, writeSpec, SpecExistsError } from '../specify/index.js';
 import {
@@ -209,7 +209,7 @@ export async function specifyCommand(
     aiService.setTracer(tracer);
     const logDir = path.join(
       absolutePath, '.agents-reverse-engineer', 'subprocess-logs',
-      new Date().toISOString().replace(/[:.]/g, '-'),
+      safeTimestamp(),
     );
     aiService.setSubprocessLogDir(logDir);
     console.error(pc.dim(`[trace] Subprocess logs → ${logDir}`));
