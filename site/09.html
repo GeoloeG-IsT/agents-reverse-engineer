@@ -133,14 +133,8 @@
   </div>
   <div class="are-nav-side"></div>
 </nav>
-<style>
-.are-blur-wrap{filter:blur(5px);pointer-events:none;user-select:none}
-.are-coming-soon-banner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;background:rgba(10,10,20,0.93);backdrop-filter:blur(12px);color:#fff;padding:28px 48px;border-radius:14px;font-family:system-ui,-apple-system,sans-serif;text-align:center;pointer-events:auto;border:1px solid rgba(255,255,255,0.1);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
-.are-coming-soon-banner h2{font-size:24px;font-weight:700;margin-bottom:8px;color:#fff}
-.are-coming-soon-banner p{font-size:14px;color:rgba(255,255,255,0.75);margin:0}
-</style>
-<div class="are-coming-soon-banner"><h2>Coming Soon</h2><p>This article is not yet available</p></div>
-<div class="are-blur-wrap">
+
+
 <article><h1>Rebuilding from Specs: ARE&#39;s Code Reconstruction Pipeline</h1>
 <p>Documentation tools typically work one way: code to docs. agents-reverse-engineer goes further — <code>are rebuild</code> takes project specifications and reconstructs source code, completing the full circle.</p>
 <h2>When Would You Use This?</h2>
@@ -170,6 +164,6 @@ export interface User {
 <h2>Limitations</h2>
 <p>AI-generated code requires review — treat output as scaffolding, not production code. Specification quality is critical. The 100KB context cap means large projects lose visibility into earlier files.</p>
 </article>
-</div>
+
 </body>
 </html>

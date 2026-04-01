@@ -1258,7 +1258,7 @@ for (const art of articles) {
   const htmlContent = marked.parse(md);
   const themeCSS = themes[art.theme]();
 
-  const isAvailable = art.id === '01' || art.id === '02' || art.id === '03' || art.id === '04' || art.id === '05' || art.id === '06' || art.id === '07' || art.id === '08';
+  const isAvailable = art.id === '01' || art.id === '02' || art.id === '03' || art.id === '04' || art.id === '05' || art.id === '06' || art.id === '07' || art.id === '08' || art.id === '09';
   const blurOverlay = isAvailable ? '' : `<style>
 .are-blur-wrap{filter:blur(5px);pointer-events:none;user-select:none}
 .are-coming-soon-banner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:50;background:rgba(10,10,20,0.93);backdrop-filter:blur(12px);color:#fff;padding:28px 48px;border-radius:14px;font-family:system-ui,-apple-system,sans-serif;text-align:center;pointer-events:auto;border:1px solid rgba(255,255,255,0.1);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
@@ -1324,7 +1324,7 @@ const cardItems = articles.map(art => {
   const md = readFileSync(join(blogDir, art.file), 'utf-8');
   const title = extractTitle(md);
   const c = themeColors[art.theme];
-  const isAvailable = art.id === '01' || art.id === '02' || art.id === '03' || art.id === '04' || art.id === '05' || art.id === '06' || art.id === '07' || art.id === '08';
+  const isAvailable = art.id === '01' || art.id === '02' || art.id === '03' || art.id === '04' || art.id === '05' || art.id === '06' || art.id === '07' || art.id === '08' || art.id === '09';
   const cls = isAvailable ? 'card' : 'card coming-soon';
   const badge = isAvailable ? '' : '<div class="coming-soon-badge">Coming Soon</div>';
   return `

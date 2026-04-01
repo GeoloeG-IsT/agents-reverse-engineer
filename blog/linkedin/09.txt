@@ -6,7 +6,7 @@ Documentation tools typically work one way: code to docs. agents-reverse-enginee
 
 WHEN WOULD YOU USE THIS?
 
-Scaffolding from specifications. Document an architecture, then use are rebuild to generate a working starting point. Useful for exploring multiple implementation approaches.
+Scaffolding from specifications. Document an architecture, then use *are rebuild* to generate a working starting point. Useful for exploring multiple implementation approaches.
 
 Framework migration. Modify your specification for a new framework and use are rebuild to generate migration scaffolding. The spec becomes the invariant; implementation becomes the variable.
 
