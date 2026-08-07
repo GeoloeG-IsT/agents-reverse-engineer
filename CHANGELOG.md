@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.19] - 2026-08-07
+
+### Changed
+- **npm publish via trusted publishing (OIDC)** — The GitHub Actions release workflow now authenticates to npm with per-job OIDC credentials instead of an `NPM_TOKEN` secret, avoiding the OTP/token issues that broke the v1.2.18 automated publish (npm is phasing out token-based publishing)
+- **Upgraded release workflow actions** — `actions/checkout` and `actions/setup-node` bumped to their latest major versions in `.github/workflows/publish.yml`
+
 ### Removed
 - **`/are-init` assistant command** — Completed the removal started in v1.2.15 (auto-initialize during install): the `init` command template is no longer generated for any runtime, the `/are-help` reference and README no longer document it, and the `init` entries were dropped from the Claude permissions allowlist and Codex prefix rules. The `are init` CLI command remains available as a low-level escape hatch
 - **Legacy `are-init` cleanup on install/uninstall** — New `removeLegacyCommandFiles()` in the installer deletes stale `are-init` command files left behind by older installations (`.claude/skills/are-init/`, `.agents/skills/are-init/`, `.opencode/commands/are-init.md`, `.gemini/commands/are-init.toml`) during both install (upgrade) and uninstall
@@ -1184,7 +1190,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Binary file detection and exclusion
 - Token budget management for AI-friendly output
 
-[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.18...HEAD
+[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.19...HEAD
+[1.2.19]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.18...v1.2.19
 [1.2.18]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.17...v1.2.18
 [1.2.17]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.16...v1.2.17
 [1.2.16]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.15...v1.2.16
