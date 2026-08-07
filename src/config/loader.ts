@@ -194,7 +194,7 @@ export async function configExists(root: string): Promise<boolean> {
  * Default model for each backend, used when generating config.yaml.
  *
  * These are the most sensible default models for each backend:
- * - Claude: 'sonnet' (native alias for claude-sonnet-4-5)
+ * - Claude: 'sonnet' (native alias for the current Sonnet model)
  * - Codex: 'gpt-5.3-codex' (latest Codex model)
  * - Gemini: 'gemini-3-flash-preview' (fast, capable model)
  * - OpenCode: 'anthropic/claude-sonnet-4-5' (fully-qualified format)
@@ -328,8 +328,9 @@ ai:
   backend: ${options?.backend ?? 'auto'}
 
   # Model identifier (backend-specific)
-  # Claude:   sonnet | opus | haiku | sonnet[1m] | opusplan
-  #           claude-opus-4-6, claude-sonnet-4-5-20250929, claude-haiku-4-5
+  # Claude:   sonnet | opus | haiku | fable | best | sonnet[1m] | opus[1m]
+  #           fable[1m] | opusplan | default, or a full model ID such as
+  #           claude-opus-5, claude-sonnet-5, claude-fable-5, claude-haiku-4-5
   # Codex:    gpt-5.3-codex | gpt-5.2-codex | gpt-5.1-codex-max | gpt-5.1-codex
   #           gpt-5-codex | gpt-5-codex-mini
   # Gemini:   gemini-3-pro-preview | gemini-3-flash-preview
@@ -337,6 +338,11 @@ ai:
   # OpenCode: provider/model format — e.g. anthropic/claude-sonnet-4-5,
   #           openai/gpt-5, google/gemini-2.5, groq/..., ollama/...
   model: ${options?.model ?? 'auto'}
+
+  # Model for \`are specify\` and \`are rebuild\` — these commands benefit from a
+  # stronger model. When unset, the default \`model: sonnet\` is upgraded to
+  # \`opus\`; any other \`model\` value is used as-is.
+  # upgradeModel: opus
 
   # Subprocess timeout in milliseconds
   # Default: 300,000ms (5 minutes)

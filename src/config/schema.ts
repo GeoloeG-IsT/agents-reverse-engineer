@@ -11,6 +11,7 @@ import {
   DEFAULT_BINARY_EXTENSIONS,
   DEFAULT_MAX_FILE_SIZE,
   DEFAULT_EXCLUDE_PATTERNS,
+  DEFAULT_AI_MODEL,
   getDefaultConcurrency,
 } from './defaults.js';
 
@@ -79,8 +80,14 @@ const GenerationSchema = z.object({
 const AISchema = z.object({
   /** AI CLI backend to use ('auto' detects from PATH) */
   backend: z.enum(['claude', 'codex', 'gemini', 'opencode', 'auto']).default('auto'),
-  /** Model identifier (backend-specific, e.g., "sonnet", "opus") */
-  model: z.string().default('sonnet'),
+  /** Model identifier (backend-specific, e.g., "sonnet", "opus", "fable") */
+  model: z.string().default(DEFAULT_AI_MODEL),
+  /**
+   * Model used by `are specify` and `are rebuild` (they benefit from a
+   * stronger model). When unset, the default `model` ("sonnet") is upgraded
+   * to "opus"; any other `model` value is used as-is.
+   */
+  upgradeModel: z.string().optional(),
   /** Default subprocess timeout in milliseconds */
   timeoutMs: z.number().positive().default(300_000),
   /** Maximum number of retries for transient errors */

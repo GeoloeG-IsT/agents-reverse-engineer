@@ -394,7 +394,8 @@ output:
 # AI service configuration
 ai:
   backend: auto # Backend: 'claude', 'codex', 'gemini', 'opencode', 'auto'
-  model: sonnet # Model identifier (backend-specific)
+  model: sonnet # Model identifier (backend-specific), e.g. sonnet, opus, fable
+  # upgradeModel: opus # Model for specify/rebuild (default: upgrades sonnet → opus)
   timeoutMs: 300000 # Subprocess timeout in ms (5 minutes)
   maxRetries: 3 # Max retries for transient errors
   concurrency: 10 # Parallel AI calls (1-20, auto-detected from CPU/RAM)
@@ -404,6 +405,13 @@ ai:
 ```
 
 ### Key Config Options
+
+**Model (`ai.model` / `ai.upgradeModel`)**
+
+- `ai.model` — model used by all commands (backend-specific name, e.g. `sonnet`, `opus`, `fable`, or a full model ID like `claude-opus-5`)
+- `ai.upgradeModel` — model used by `are specify` and `are rebuild`, which benefit from a stronger model
+- When `ai.upgradeModel` is unset, the default `model: sonnet` is upgraded to `opus` for those commands; any other `ai.model` value is used as-is
+- The `--model` CLI flag overrides both
 
 **Concurrency (`ai.concurrency`)**
 

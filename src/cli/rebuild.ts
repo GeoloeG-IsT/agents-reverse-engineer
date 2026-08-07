@@ -15,6 +15,7 @@ import os from 'node:os';
 import * as path from 'node:path';
 import pc from 'picocolors';
 import { loadConfig, findProjectRoot } from '../config/loader.js';
+import { DEFAULT_AI_MODEL, DEFAULT_UPGRADE_MODEL } from '../config/defaults.js';
 import { consoleLogger } from '../core/logger.js';
 import {
   AIService,
@@ -151,10 +152,12 @@ export async function rebuildCommand(
   // Provision backend-specific resources (e.g., OpenCode agent config)
   await backend.ensureProjectConfig?.(absolutePath);
 
-  // Resolve effective model: CLI flag > config override > opus default
-  // Rebuild benefits from the best model; upgrade default sonnet to opus
+  // Resolve effective model: CLI flag > ai.upgradeModel > upgraded ai.model
+  // Rebuild benefits from the best model; upgrade the default model unless
+  // the user configured ai.upgradeModel or a non-default ai.model
   const effectiveModel = options.model
-    ?? (config.ai.model === 'sonnet' ? 'opus' : config.ai.model);
+    ?? config.ai.upgradeModel
+    ?? (config.ai.model === DEFAULT_AI_MODEL ? DEFAULT_UPGRADE_MODEL : config.ai.model);
 
   // Debug: log backend info
   if (options.debug) {

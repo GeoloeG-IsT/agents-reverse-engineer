@@ -43,6 +43,18 @@ export function getDefaultConcurrency(): number {
 }
 
 /**
+ * Default AI model when none is configured (backend-specific alias).
+ */
+export const DEFAULT_AI_MODEL = 'sonnet';
+
+/**
+ * Model that `are specify` and `are rebuild` upgrade to when `ai.model` is
+ * left at the default — those commands benefit from a stronger model.
+ * Overridable via `ai.upgradeModel` in config.yaml.
+ */
+export const DEFAULT_UPGRADE_MODEL = 'opus';
+
+/**
  * Default vendor directories to exclude from analysis.
  * These are typically package managers, build outputs, or version control directories.
  */
