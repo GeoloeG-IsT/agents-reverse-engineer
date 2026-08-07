@@ -23,22 +23,13 @@ Display the complete ARE command reference.
 
 ## Quick Start
 
-1. `/are-init` — Create configuration file
-2. `/are-generate` — Generate documentation for the codebase
-3. `/are-update` — Keep docs in sync after code changes
-4. `/are-dashboard` — View costs and telemetry
+1. `/are-generate` — Generate documentation for the codebase
+2. `/are-update` — Keep docs in sync after code changes
+3. `/are-dashboard` — View costs and telemetry
+
+Configuration (`.agents-reverse-engineer/config.yaml`) is created automatically during installation.
 
 ## Commands Reference
-
-### `/are-init`
-Initialize configuration in this project.
-
-Creates `.agents-reverse-engineer/config.yaml` with customizable settings.
-
-**Usage:** `/are-init`
-**CLI:** `npx agents-reverse-engineer init`
-
----
 
 ### `/are-discover`
 Discover files that would be analyzed for documentation.
@@ -333,7 +324,6 @@ related_files: [./types.ts, ./middleware.ts]
 
 **Initial documentation:**
 ```
-/are-init
 /are-generate
 ```
 

@@ -80,20 +80,12 @@ The interactive installer prompts you to:
 
 This installs:
 
-- **Commands** — `/are-init`, `/are-discover`, `/are-generate`, `/are-update`, `/are-specify`, `/are-plan`, `/are-implement`, `/are-clean`, `/are-dashboard`
+- **Commands** — `/are-discover`, `/are-generate`, `/are-update`, `/are-specify`, `/are-plan`, `/are-implement`, `/are-clean`, `/are-dashboard`
 - **Codex context rules** — local install writes `./AGENTS.override.md`; global install writes `~/.codex/AGENTS.override.md` with lazy AGENTS hierarchy loading guidance
 
-### 2. Initialize Configuration
+The installer also initializes the project: it creates `.agents-reverse-engineer/config.yaml` with default settings, updates `.gitignore`, and configures `.vscode/settings.json` — no separate init step needed.
 
-After installation, create the configuration file in your AI assistant:
-
-```bash
-/are-init
-```
-
-This creates `.agents-reverse-engineer/config.yaml` with default settings.
-
-### 3. Generate Documentation
+### 2. Generate Documentation
 
 In your AI assistant:
 
@@ -147,23 +139,13 @@ npx agents-reverse-engineer@latest --version
 npx agents-reverse-engineer@latest
 ```
 
-Interactive installer installs commands and hooks for your chosen runtime(s).
+Interactive installer installs commands and hooks for your chosen runtime(s), and creates `.agents-reverse-engineer/config.yaml` with exclusion patterns and options.
 
 **Runtimes:** Claude Code, Codex, OpenCode, Gemini CLI (or all at once)
 
 ---
 
-### 2. Initialize Configuration
-
-```
-/are-init
-```
-
-Creates `.agents-reverse-engineer/config.yaml` with exclusion patterns and options.
-
----
-
-### 3. Discover & Plan
+### 2. Discover & Plan
 
 ```
 /are-discover
@@ -175,7 +157,7 @@ Uses **post-order traversal** — deepest directories first, so child documentat
 
 ---
 
-### 4. Generate (in your AI assistant)
+### 3. Generate (in your AI assistant)
 
 ```
 /are-generate
@@ -188,7 +170,7 @@ Your AI assistant executes the plan:
 
 ---
 
-### 5. Update Incrementally
+### 4. Update Incrementally
 
 ```
 /are-update
@@ -198,7 +180,7 @@ Only regenerates documentation for files that changed since last run.
 
 ---
 
-### 6. Generate Specification (Experimental)
+### 5. Generate Specification (Experimental)
 
 ```
 /are-specify
@@ -208,7 +190,7 @@ Synthesizes all AGENTS.md documentation into a single project specification docu
 
 ---
 
-### 7. Plan Comparison (A/B Test) (Experimental)
+### 6. Plan Comparison (A/B Test) (Experimental)
 
 ```
 are plan "Add user authentication with JWT"
@@ -218,7 +200,7 @@ Runs AI planning **twice** on the same task — once with ARE documentation and 
 
 ---
 
-### 8. Implement Comparison (A/B Test) (Experimental)
+### 7. Implement Comparison (A/B Test) (Experimental)
 
 ```
 are implement "Add user authentication with JWT"
@@ -287,7 +269,6 @@ are implement --show 2026-02-16         # View a comparison
 
 | Command          | Description                                 | Supported Runtimes              |
 | ---------------- | ------------------------------------------- | ------------------------------- |
-| `/are-init`      | Initialize config and commands              | Claude, Codex, OpenCode, Gemini |
 | `/are-discover`  | Rediscover and regenerate plan              | Claude, Codex, OpenCode, Gemini |
 | `/are-generate`  | Generate all documentation                  | Claude, Codex, OpenCode, Gemini |
 | `/are-update`    | Update changed files only                   | Claude, Codex, OpenCode, Gemini |

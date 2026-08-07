@@ -96,24 +96,6 @@ Run the update command in the background and monitor progress in real time.
 </execution>`,
   },
 
-  init: {
-    description: 'Initialize agents-reverse-engineer configuration',
-    argumentHint: '',
-    content: `Initialize agents-reverse-engineer configuration in this project.
-
-<execution>
-1. **Read version**: Read \`VERSION_FILE_PATH\` → store as \`$VERSION\`. Show the user: \`agents-reverse-engineer v$VERSION\`
-
-2. Run the agents-reverse-engineer init command:
-
-\`\`\`bash
-npx agents-reverse-engineer@$VERSION init
-\`\`\`
-
-This creates \`.agents-reverse-engineer/config.yaml\` configuration file.
-</execution>`,
-  },
-
   discover: {
     description: 'Discover files in codebase',
     argumentHint: '[path] [--debug] [--trace]',
@@ -429,22 +411,13 @@ Display the complete ARE command reference.
 
 ## Quick Start
 
-1. \`COMMAND_PREFIXinit\` — Create configuration file
-2. \`COMMAND_PREFIXgenerate\` — Generate documentation for the codebase
-3. \`COMMAND_PREFIXupdate\` — Keep docs in sync after code changes
-4. \`COMMAND_PREFIXdashboard\` — View costs and telemetry
+1. \`COMMAND_PREFIXgenerate\` — Generate documentation for the codebase
+2. \`COMMAND_PREFIXupdate\` — Keep docs in sync after code changes
+3. \`COMMAND_PREFIXdashboard\` — View costs and telemetry
+
+Configuration (\`.agents-reverse-engineer/config.yaml\`) is created automatically during installation.
 
 ## Commands Reference
-
-### \`COMMAND_PREFIXinit\`
-Initialize configuration in this project.
-
-Creates \`.agents-reverse-engineer/config.yaml\` with customizable settings.
-
-**Usage:** \`COMMAND_PREFIXinit\`
-**CLI:** \`npx agents-reverse-engineer init\`
-
----
 
 ### \`COMMAND_PREFIXdiscover\`
 Discover files that would be analyzed for documentation.
@@ -739,7 +712,6 @@ related_files: [./types.ts, ./middleware.ts]
 
 **Initial documentation:**
 \`\`\`
-COMMAND_PREFIXinit
 COMMAND_PREFIXgenerate
 \`\`\`
 

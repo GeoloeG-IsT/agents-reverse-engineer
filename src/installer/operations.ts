@@ -5,7 +5,7 @@
  * verifying installations, and registering hooks in settings.json.
  */
 
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync, rmdirSync } from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse, modify, applyEdits } from 'jsonc-parser';
@@ -17,6 +17,55 @@ import {
   getOpenCodeTemplates,
   getGeminiTemplates,
 } from '../integration/templates.js';
+
+/**
+ * Command template files from old installations that are no longer part of the
+ * current template set (relative to the runtime base path). `init` was merged
+ * into the installer in v1.2.15, so the standalone are-init command is removed
+ * on install (upgrade) and uninstall.
+ */
+export const LEGACY_COMMAND_FILES: Record<Exclude<Runtime, 'all'>, string[]> = {
+  claude: ['skills/are-init/SKILL.md'],
+  codex: ['skills/are-init/SKILL.md'],
+  opencode: ['commands/are-init.md'],
+  gemini: ['commands/are-init.toml'],
+};
+
+/**
+ * Remove leftover command templates from old installations
+ *
+ * Deletes files listed in LEGACY_COMMAND_FILES and prunes the per-command
+ * directory when it becomes empty (Claude/Codex skills layout). Errors are
+ * swallowed — legacy cleanup must never block an install or uninstall.
+ *
+ * @param runtime - Target runtime
+ * @param basePath - Runtime installation base path
+ * @param dryRun - If true, don't delete anything
+ * @returns Absolute paths of files that were (or would be) deleted
+ */
+export function removeLegacyCommandFiles(
+  runtime: Exclude<Runtime, 'all'>,
+  basePath: string,
+  dryRun: boolean,
+): string[] {
+  const removed: string[] = [];
+  for (const relativePath of LEGACY_COMMAND_FILES[runtime]) {
+    const fullPath = path.join(basePath, relativePath);
+    if (!existsSync(fullPath)) {
+      continue;
+    }
+    if (!dryRun) {
+      try {
+        unlinkSync(fullPath);
+        rmdirSync(path.dirname(fullPath)); // Prune skills/are-* dir; fails harmlessly if non-empty
+      } catch {
+        // Non-fatal: leave leftovers in place rather than failing the run
+      }
+    }
+    removed.push(fullPath);
+  }
+  return removed;
+}
 
 /**
  * Options for install operations
@@ -57,7 +106,6 @@ const NPMRC_SECTION_LINES = [
 ];
 
 const CODEX_PREFIX_RULES: string[][] = [
-  ['npx', 'agents-reverse-engineer', 'init'],
   ['npx', 'agents-reverse-engineer', 'discover'],
   ['npx', 'agents-reverse-engineer', 'generate'],
   ['npx', 'agents-reverse-engineer', 'update'],
@@ -301,6 +349,10 @@ function installFilesForRuntime(
       filesCreated.push(fullPath);
     }
   }
+
+  // Clean up command templates from old installations (e.g. are-init,
+  // obsolete since init was merged into the installer in v1.2.15)
+  removeLegacyCommandFiles(runtime, basePath, options.dryRun);
 
   // Install hooks/plugins based on runtime
   let hookRegistered = false;
@@ -630,7 +682,6 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
  * Permissions to auto-allow for ARE commands
  */
 const ARE_PERMISSIONS = [
-  'Bash(npx agents-reverse-engineer init*)',
   'Bash(npx agents-reverse-engineer discover*)',
   'Bash(npx agents-reverse-engineer generate*)',
   'Bash(npx agents-reverse-engineer update*)',

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **`/are-init` assistant command** — Completed the removal started in v1.2.15 (auto-initialize during install): the `init` command template is no longer generated for any runtime, the `/are-help` reference and README no longer document it, and the `init` entries were dropped from the Claude permissions allowlist and Codex prefix rules. The `are init` CLI command remains available as a low-level escape hatch
+- **Legacy `are-init` cleanup on install/uninstall** — New `removeLegacyCommandFiles()` in the installer deletes stale `are-init` command files left behind by older installations (`.claude/skills/are-init/`, `.agents/skills/are-init/`, `.opencode/commands/are-init.md`, `.gemini/commands/are-init.toml`) during both install (upgrade) and uninstall
+
 ## [1.2.18] - 2026-08-07
 
 ### Added

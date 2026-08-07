@@ -28,7 +28,6 @@
   },
   "permissions": {
     "allow": [
-      "Bash(npx agents-reverse-engineer init*)",
       "Bash(npx agents-reverse-engineer discover*)",
       "Bash(npx agents-reverse-engineer generate*)",
       "Bash(npx agents-reverse-engineer update*)",

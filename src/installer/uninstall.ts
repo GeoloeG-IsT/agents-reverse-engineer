@@ -16,6 +16,7 @@ import {
   getOpenCodeTemplates,
   getGeminiTemplates,
 } from '../integration/templates.js';
+import { removeLegacyCommandFiles } from './operations.js';
 
 /**
  * Session hook configuration for settings.json (matches operations.ts)
@@ -72,7 +73,8 @@ const ARE_PLUGIN_FILENAMES = [
 const OPENCODE_AGENT_FILENAME = 'are-summarizer.md';
 
 /**
- * Permissions to remove during uninstall (must match operations.ts)
+ * Permissions to remove during uninstall (matches operations.ts, plus legacy
+ * entries from old installations — e.g. init, removed in favor of auto-init)
  */
 const ARE_PERMISSIONS = [
   'Bash(npx agents-reverse-engineer init*)',
@@ -271,6 +273,10 @@ function uninstallFilesForRuntime(
       filesSkipped.push(fullPath); // File didn't exist
     }
   }
+
+  // Remove command templates from old installations no longer in the current
+  // template set (e.g. are-init, obsolete since init merged into the installer)
+  filesCreated.push(...removeLegacyCommandFiles(runtime, basePath, dryRun));
 
   // Remove hooks/plugins based on runtime
   let hookUnregistered = false;
