@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.18] - 2026-08-07
+
+### Added
+- **`ai.upgradeModel` config option** — New optional setting in `config.yaml` that sets the model used by `are specify` and `are rebuild` (commands that benefit from a stronger model). When unset, the previous behavior is preserved: the default `model: sonnet` is upgraded to `opus`, and any other `model` value is used as-is. The `--model` CLI flag still overrides both
+- **`DEFAULT_AI_MODEL` / `DEFAULT_UPGRADE_MODEL` constants** — Model names (`sonnet`, `opus`) are now defined once in `src/config/defaults.ts` instead of being hardcoded in `specify.ts` and `rebuild.ts`
+
+### Changed
+- **Refreshed Claude model documentation** — The generated `config.yaml` template and README now list the current Claude CLI model aliases (`sonnet | opus | haiku | fable | best | sonnet[1m] | opus[1m] | fable[1m] | opusplan | default`) and full model IDs (`claude-opus-5`, `claude-sonnet-5`, `claude-fable-5`, `claude-haiku-4-5`), replacing the outdated `sonnet[1m] | opusplan` / `claude-opus-4-6` list
+- **README config reference** — Added a "Model" entry to Key Config Options documenting `ai.model` and `ai.upgradeModel` resolution order
+- **Regenerated AGENTS.md/CLAUDE.md documentation** across the source tree (installer, integration, plan, implement, views modules)
+- **Blog and site updates** — Updated availability and HTML structure for articles 05–09
+
 ## [1.2.17] - 2026-02-25
 
 ### Changed
@@ -1168,7 +1180,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Binary file detection and exclusion
 - Token budget management for AI-friendly output
 
-[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.17...HEAD
+[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.18...HEAD
+[1.2.18]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.17...v1.2.18
 [1.2.17]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.16...v1.2.17
 [1.2.16]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.15...v1.2.16
 [1.2.15]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.14...v1.2.15
