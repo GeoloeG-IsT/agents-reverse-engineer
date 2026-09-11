@@ -10,7 +10,7 @@ Runtime integration layer providing background update checks and context injecti
 SessionStart hook that spawns detached child process via `spawn(process.execPath, ['-e', inlineScript])` to check `npm view agents-reverse-engineer version` and cache results to `~/.claude/cache/are-update-check.json`.
 
 ### [are-context-loader.js](./are-context-loader.js)
-PostToolUse hook that walks directory tree from `tool_input.file_path` to `data.cwd`, loads ARE-generated AGENTS.md files, injects as `additionalContext` with session-scoped deduplication via `${os.tmpdir()}/are-context-loader/${session_id}.json`.
+PostToolUse hook (matcher `Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task`) that derives start directories from `tool_input.file_path`/`notebook_path` or scans them out of Bash `command` and Agent/Task `prompt`/`description` strings, walks each directory tree up to `data.cwd`, loads ARE-generated AGENTS.md files parent-first, and injects them as `additionalContext` with session-scoped deduplication via `${os.tmpdir()}/are-context-loader/${session_id}.json`.
 
 ### [opencode-are-check-update.js](./opencode-are-check-update.js)
 OpenCode plugin exporting `AreCheckUpdate(ctx)` factory triggering on `session.created` events, checks `~/.config/opencode/ARE-VERSION` files, spawns background npm version check to `~/.config/opencode/cache/are-update-check.json`.
@@ -25,7 +25,7 @@ Hooks execute as extension points in editor lifecycles:
 
 - `are-check-update.js` targets Claude Desktop SDK SessionStart event, reads `.claude/ARE-VERSION` files
 - `opencode-are-check-update.js` implements OpenCode plugin contract, reads `.opencode/ARE-VERSION` and `~/.config/opencode/ARE-VERSION` files
-- `are-context-loader.js` depends on PostToolUse event payloads containing `tool_input.file_path` and `data.cwd` fields
+- `are-context-loader.js` depends on PostToolUse event payloads containing `data.cwd` plus either `tool_input.file_path`/`notebook_path` or scannable `tool_input.command` (Bash) / `tool_input.prompt` (Agent, Task) text
 
 Both update checkers use identical cache format: `{update_available: boolean, installed: string, latest: string, checked: number}`.
 

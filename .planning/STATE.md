@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-07)
 Phase: 11 (Rebuild Command)
 Plan: 2 of 2
 Status: Phase complete
-Last activity: 2026-02-09 -- Completed 11-02-PLAN.md
+Last activity: 2026-09-11 - Completed quick task 001: Extend are-context-loader hook to Bash/Edit/Write/Agent tools so nested AGENTS.md is loaded (issue #14)
 
 Progress: [████████████████████████] 100% (v4.0 -- 2/2 plans)
 
@@ -151,8 +151,14 @@ v4.0 decisions:
 
 None.
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 001 | Extend are-context-loader hook to Bash/Edit/Write/Agent tools so nested AGENTS.md is loaded (issue #14) | 2026-09-11 | b1334b1 | [001-extend-are-context-loader-hook-to-bash-e](./quick/001-extend-are-context-loader-hook-to-bash-e/) |
+
 ## Session Continuity
 
-Last session: 2026-02-09
-Stopped at: Completed 11-02-PLAN.md (Phase 11 complete)
+Last session: 2026-09-11
+Stopped at: Completed quick task 001 (are-context-loader multi-tool extension, issue #14)
 Resume file: None

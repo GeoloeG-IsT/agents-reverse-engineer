@@ -357,16 +357,24 @@ function installFilesForRuntime(
   // Install hooks/plugins based on runtime
   let hookRegistered = false;
   if (runtime === 'claude' || runtime === 'gemini') {
+    const upgradeClaudeContextLoaderHook =
+      runtime === 'claude' && hasStaleClaudeContextLoaderMatcher(basePath);
+
     // Claude and Gemini: install session hooks
     for (const hookDef of ARE_HOOKS) {
       const hookPath = path.join(basePath, 'hooks', hookDef.filename);
-      if (existsSync(hookPath) && !options.force) {
+      const hookContent = readBundledHook(hookDef.filename);
+      const shouldUpgradeContextLoader =
+        upgradeClaudeContextLoaderHook &&
+        hookDef.filename === 'are-context-loader.js' &&
+        shouldUpgradeManagedHookFile(hookPath, hookContent, ARE_CONTEXT_LOADER_MARKER);
+
+      if (existsSync(hookPath) && !options.force && !shouldUpgradeContextLoader) {
         filesSkipped.push(hookPath);
       } else {
         if (!options.dryRun) {
           try {
             ensureDir(hookPath);
-            const hookContent = readBundledHook(hookDef.filename);
             writeFileSync(hookPath, hookContent, 'utf-8');
           } catch (err) {
             errors.push(`Failed to write hook ${hookPath}: ${err}`);
@@ -545,6 +553,9 @@ interface GeminiSettingsJson {
   [key: string]: unknown;
 }
 
+const ARE_CONTEXT_LOADER_MATCHER = 'Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task';
+const ARE_CONTEXT_LOADER_MARKER = 'ARE Context Loader Hook';
+
 /**
  * Hook definitions for ARE (Claude only — Gemini skips PostToolUse hooks)
  */
@@ -558,8 +569,51 @@ interface HookDefinition {
 
 const ARE_HOOKS: HookDefinition[] = [
   { event: 'SessionStart', filename: 'are-check-update.js', name: 'are-check-update' },
-  { event: 'PostToolUse', filename: 'are-context-loader.js', name: 'are-context-loader', matcher: 'Read' },
+  {
+    event: 'PostToolUse',
+    filename: 'are-context-loader.js',
+    name: 'are-context-loader',
+    matcher: ARE_CONTEXT_LOADER_MATCHER,
+  },
 ];
+
+function hasStaleClaudeContextLoaderMatcher(basePath: string): boolean {
+  const settingsPath = path.join(basePath, 'settings.json');
+  if (!existsSync(settingsPath)) {
+    return false;
+  }
+
+  try {
+    const settings = (parse(readFileSync(settingsPath, 'utf-8')) ?? {}) as SettingsJson;
+    const hookCommand = 'node .claude/hooks/are-context-loader.js';
+    return (
+      settings.hooks?.PostToolUse?.some(
+        (event) =>
+          event.matcher !== ARE_CONTEXT_LOADER_MATCHER &&
+          event.hooks?.some((hook) => hook.command === hookCommand),
+      ) ?? false
+    );
+  } catch {
+    return false;
+  }
+}
+
+function shouldUpgradeManagedHookFile(
+  hookPath: string,
+  bundledContent: string,
+  marker: string,
+): boolean {
+  if (!existsSync(hookPath)) {
+    return false;
+  }
+
+  try {
+    const currentContent = readFileSync(hookPath, 'utf-8');
+    return currentContent !== bundledContent && currentContent.includes(marker);
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Plugin definitions for ARE (OpenCode)
@@ -582,13 +636,14 @@ const ARE_PLUGINS: PluginDefinition[] = [
 /**
  * Register ARE hooks in settings.json
  *
- * Registers PostToolUse hooks (context loader) for Claude Code.
+ * Registers PostToolUse hooks (context loader) for Claude Code and upgrades
+ * stale matchers on hooks that are already installed.
  * Merges with existing hooks, doesn't overwrite.
  *
  * @param basePath - Base installation path (e.g., ~/.claude or ~/.gemini)
  * @param runtime - Target runtime (claude or gemini)
  * @param dryRun - If true, don't write changes
- * @returns true if any hook was added, false if all already existed
+ * @returns true if settings were changed (hook added or matcher upgraded), false otherwise
  */
 export function registerHooks(
   basePath: string,
@@ -612,6 +667,10 @@ export function registerHooks(
 
 /**
  * Register ARE hooks in Claude Code settings.json format
+ *
+ * Adds missing hooks and upgrades stale matchers on existing entries (e.g. an
+ * are-context-loader installed by <=1.2.19 still carrying `matcher: "Read"`),
+ * without broadening unrelated commands that happen to share the same event.
  */
 function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: boolean): boolean {
   // Load or create settings (JSONC-aware)
@@ -631,7 +690,7 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
     settings.hooks = {};
   }
 
-  let addedAny = false;
+  let changedAny = false;
 
   for (const hookDef of ARE_HOOKS) {
     const hookCommand = `node ${runtimeDir}/hooks/${hookDef.filename}`;
@@ -641,12 +700,13 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
       settings.hooks[hookDef.event] = [];
     }
 
-    // Check if hook already exists (by command string match)
-    const hookExists = settings.hooks[hookDef.event]!.some((event) =>
+    // Look up an existing entry (by command string match)
+    const existingIndex = settings.hooks[hookDef.event]!.findIndex((event) =>
       event.hooks?.some((h) => h.command === hookCommand),
     );
+    const existing = existingIndex >= 0 ? settings.hooks[hookDef.event]![existingIndex] : undefined;
 
-    if (!hookExists) {
+    if (!existing) {
       // Define our hook (Claude format: nested hooks array, optional matcher for PostToolUse)
       const newHook: HookEvent = {
         ...(hookDef.matcher ? { matcher: hookDef.matcher } : {}),
@@ -658,11 +718,32 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
         ],
       };
       settings.hooks[hookDef.event]!.push(newHook);
-      addedAny = true;
+      changedAny = true;
+    } else if (hookDef.matcher !== undefined && existing.matcher !== hookDef.matcher) {
+      if (existing.hooks.length === 1) {
+        // Upgrade a stale matcher in place when ARE is the only nested command.
+        existing.matcher = hookDef.matcher;
+      } else {
+        // Preserve unrelated commands under their original matcher by moving the
+        // ARE hook into its own widened event.
+        const existingHookIndex = existing.hooks.findIndex((hook) => hook.command === hookCommand);
+        existing.hooks = [...existing.hooks];
+        existing.hooks.splice(existingHookIndex, 1);
+        settings.hooks[hookDef.event]!.splice(existingIndex + 1, 0, {
+          matcher: hookDef.matcher,
+          hooks: [
+            {
+              type: 'command',
+              command: hookCommand,
+            },
+          ],
+        });
+      }
+      changedAny = true;
     }
   }
 
-  if (!addedAny) {
+  if (!changedAny) {
     return false;
   }
 
