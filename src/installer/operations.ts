@@ -562,7 +562,7 @@ const ARE_HOOKS: HookDefinition[] = [
     event: 'PostToolUse',
     filename: 'are-context-loader.js',
     name: 'are-context-loader',
-    matcher: 'Read|Edit|Write|MultiEdit|Bash|Agent|Task',
+    matcher: 'Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task',
   },
 ];
 
