@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- **`are-context-loader` hook now fires for more tools** — the PostToolUse matcher widened from `Read` to `Read|Edit|Write|MultiEdit|Bash|Agent|Task`; the hook derives paths from `tool_input.file_path`/`notebook_path`, scans Bash `command` strings and Agent/Task `prompt`/`description` for project-relative path tokens, and injects the matching nested `AGENTS.md` files (fixes #14, where nested AGENTS.md was never loaded in Bash-driven sessions)
+- **`are-context-loader` hook now fires for more tools** — the PostToolUse matcher widened from `Read` to `Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task`; the hook derives paths from `tool_input.file_path`/`notebook_path`, scans Bash `command` strings and Agent/Task `prompt`/`description` for project-relative path tokens, and injects the matching nested `AGENTS.md` files (fixes #14, where nested AGENTS.md was never loaded in Bash-driven sessions)
 - **Installer upgrades stale hook matchers** — `registerClaudeHooks()` now updates an existing `are-context-loader` entry whose matcher differs from the current definition instead of leaving 1.2.19-era `matcher: "Read"` entries in place
 
 ## [1.2.19] - 2026-08-07

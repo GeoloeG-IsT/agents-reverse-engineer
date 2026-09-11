@@ -10,7 +10,7 @@ Runtime integration layer providing background update checks and context injecti
 SessionStart hook that spawns detached child process via `spawn(process.execPath, ['-e', inlineScript])` to check `npm view agents-reverse-engineer version` and cache results to `~/.claude/cache/are-update-check.json`.
 
 ### [are-context-loader.js](./are-context-loader.js)
-PostToolUse hook (matcher `Read|Edit|Write|MultiEdit|Bash|Agent|Task`) that derives start directories from `tool_input.file_path`/`notebook_path` or scans them out of Bash `command` and Agent/Task `prompt`/`description` strings, walks each directory tree up to `data.cwd`, loads ARE-generated AGENTS.md files parent-first, and injects them as `additionalContext` with session-scoped deduplication via `${os.tmpdir()}/are-context-loader/${session_id}.json`.
+PostToolUse hook (matcher `Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task`) that derives start directories from `tool_input.file_path`/`notebook_path` or scans them out of Bash `command` and Agent/Task `prompt`/`description` strings, walks each directory tree up to `data.cwd`, loads ARE-generated AGENTS.md files parent-first, and injects them as `additionalContext` with session-scoped deduplication via `${os.tmpdir()}/are-context-loader/${session_id}.json`.
 
 ### [opencode-are-check-update.js](./opencode-are-check-update.js)
 OpenCode plugin exporting `AreCheckUpdate(ctx)` factory triggering on `session.created` events, checks `~/.config/opencode/ARE-VERSION` files, spawns background npm version check to `~/.config/opencode/cache/are-update-check.json`.
