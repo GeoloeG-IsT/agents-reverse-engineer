@@ -726,7 +726,9 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
       } else {
         // Preserve unrelated commands under their original matcher by moving the
         // ARE hook into its own widened event.
-        existing.hooks = existing.hooks.filter((hook) => hook.command !== hookCommand);
+        const existingHookIndex = existing.hooks.findIndex((hook) => hook.command === hookCommand);
+        existing.hooks = [...existing.hooks];
+        existing.hooks.splice(existingHookIndex, 1);
         settings.hooks[hookDef.event]!.splice(existingIndex + 1, 0, {
           matcher: hookDef.matcher,
           hooks: [
