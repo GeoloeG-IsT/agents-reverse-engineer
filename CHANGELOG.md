@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.20] - 2026-09-11
+
 ### Changed
 - **`are-context-loader` hook now fires for more tools** — the PostToolUse matcher widened from `Read` to `Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task`; the hook derives paths from `tool_input.file_path`/`notebook_path`, scans Bash `command` strings and Agent/Task `prompt`/`description` for project-relative path tokens, and injects the matching nested `AGENTS.md` files (fixes #14, where nested AGENTS.md was never loaded in Bash-driven sessions)
 - **Installer upgrades stale hook matchers** — `registerClaudeHooks()` now updates an existing `are-context-loader` entry whose matcher differs from the current definition instead of leaving 1.2.19-era `matcher: "Read"` entries in place
+
+### Fixed
+- **Context loader resolves symlinks before the project-boundary check** — `resolveStartDir()` now compares the real path of a token against the real project root, so symlinked paths pointing outside the project no longer pass the boundary check, and start directories are derived from the resolved path
+- **Stricter path-token extraction from Bash/Agent text** — `extractPathTokens()` now splits on whitespace and validates every `/`-separated segment (allowing `.`/`..` and a leading slash) instead of relying on a loose regex, reducing false-positive AGENTS.md lookups from URLs and option strings
+- **Hook migration keeps duplicate command entries intact** — when the installer moves the `are-context-loader` hook out of a shared matcher group, it now removes only the single matching entry instead of filtering out every hook with the same command
 
 ## [1.2.19] - 2026-08-07
 
@@ -1194,7 +1201,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Binary file detection and exclusion
 - Token budget management for AI-friendly output
 
-[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.19...HEAD
+[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.20...HEAD
+[1.2.20]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.19...v1.2.20
 [1.2.19]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.18...v1.2.19
 [1.2.18]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.17...v1.2.18
 [1.2.17]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.16...v1.2.17
