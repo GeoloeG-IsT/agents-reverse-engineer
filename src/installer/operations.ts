@@ -558,7 +558,12 @@ interface HookDefinition {
 
 const ARE_HOOKS: HookDefinition[] = [
   { event: 'SessionStart', filename: 'are-check-update.js', name: 'are-check-update' },
-  { event: 'PostToolUse', filename: 'are-context-loader.js', name: 'are-context-loader', matcher: 'Read' },
+  {
+    event: 'PostToolUse',
+    filename: 'are-context-loader.js',
+    name: 'are-context-loader',
+    matcher: 'Read|Edit|Write|MultiEdit|Bash|Agent|Task',
+  },
 ];
 
 /**
@@ -582,13 +587,14 @@ const ARE_PLUGINS: PluginDefinition[] = [
 /**
  * Register ARE hooks in settings.json
  *
- * Registers PostToolUse hooks (context loader) for Claude Code.
+ * Registers PostToolUse hooks (context loader) for Claude Code and upgrades
+ * stale matchers on hooks that are already installed.
  * Merges with existing hooks, doesn't overwrite.
  *
  * @param basePath - Base installation path (e.g., ~/.claude or ~/.gemini)
  * @param runtime - Target runtime (claude or gemini)
  * @param dryRun - If true, don't write changes
- * @returns true if any hook was added, false if all already existed
+ * @returns true if settings were changed (hook added or matcher upgraded), false otherwise
  */
 export function registerHooks(
   basePath: string,
@@ -612,6 +618,9 @@ export function registerHooks(
 
 /**
  * Register ARE hooks in Claude Code settings.json format
+ *
+ * Adds missing hooks and upgrades stale matchers on existing entries (e.g. an
+ * are-context-loader installed by <=1.2.19 still carrying `matcher: "Read"`).
  */
 function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: boolean): boolean {
   // Load or create settings (JSONC-aware)
@@ -631,7 +640,7 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
     settings.hooks = {};
   }
 
-  let addedAny = false;
+  let changedAny = false;
 
   for (const hookDef of ARE_HOOKS) {
     const hookCommand = `node ${runtimeDir}/hooks/${hookDef.filename}`;
@@ -641,12 +650,12 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
       settings.hooks[hookDef.event] = [];
     }
 
-    // Check if hook already exists (by command string match)
-    const hookExists = settings.hooks[hookDef.event]!.some((event) =>
+    // Look up an existing entry (by command string match)
+    const existing = settings.hooks[hookDef.event]!.find((event) =>
       event.hooks?.some((h) => h.command === hookCommand),
     );
 
-    if (!hookExists) {
+    if (!existing) {
       // Define our hook (Claude format: nested hooks array, optional matcher for PostToolUse)
       const newHook: HookEvent = {
         ...(hookDef.matcher ? { matcher: hookDef.matcher } : {}),
@@ -658,11 +667,15 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
         ],
       };
       settings.hooks[hookDef.event]!.push(newHook);
-      addedAny = true;
+      changedAny = true;
+    } else if (hookDef.matcher !== undefined && existing.matcher !== hookDef.matcher) {
+      // Upgrade a stale matcher in place (e.g. <=1.2.19 installed matcher: "Read")
+      existing.matcher = hookDef.matcher;
+      changedAny = true;
     }
   }
 
-  if (!addedAny) {
+  if (!changedAny) {
     return false;
   }
 
