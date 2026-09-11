@@ -16,7 +16,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Read",
+        "matcher": "Read|Edit|Write|MultiEdit|Bash|Agent|Task",
         "hooks": [
           {
             "type": "command",
