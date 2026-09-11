@@ -573,7 +573,6 @@ const ARE_HOOKS: HookDefinition[] = [
     event: 'PostToolUse',
     filename: 'are-context-loader.js',
     name: 'are-context-loader',
-<<<<<<< HEAD
     matcher: ARE_CONTEXT_LOADER_MATCHER,
   },
 ];
