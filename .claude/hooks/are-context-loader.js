@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * ARE Context Loader Hook (PostToolUse → Read|Edit|Write|MultiEdit|Bash|Agent|Task)
+ * ARE Context Loader Hook (PostToolUse → Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task)
  *
  * Fires after tool calls that touch project files. Candidate paths are taken
  * from `tool_input.file_path` / `tool_input.notebook_path` (Read, Edit, Write,
