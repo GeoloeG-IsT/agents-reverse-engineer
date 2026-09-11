@@ -156,19 +156,26 @@ function extractPathTokens(text) {
   if (text.length > MAX_SCAN_LENGTH) return [];
 
   const normalised = text.replace(/['"`]/g, ' ');
-  const matches = normalised.match(/(?:[A-Za-z0-9._~@+-]*\/)+[A-Za-z0-9._~@+-]+\/?/g);
-  if (!matches) return [];
-
   const tokens = [];
   const seenTokens = new Set();
-  for (const match of matches) {
-    const token = match.replace(/[,;:)\]}.]+$/, '');
-    if (!token || seenTokens.has(token)) continue;
+  for (const fragment of normalised.split(/\s+/)) {
+    const token = fragment.replace(/^[([{,;:]+|[,;:)\]}.]+$/g, '');
+    if (!isPathToken(token) || seenTokens.has(token)) continue;
     seenTokens.add(token);
     tokens.push(token);
     if (tokens.length >= MAX_TOKENS) break;
   }
   return tokens;
+}
+
+function isPathToken(token) {
+  if (!token) return false;
+
+  const segments = token.split('/');
+  return segments.every((segment, index) => {
+    if (segment === '' && index === 0) return true; // leading slash
+    return segment === '.' || segment === '..' || /^[A-Za-z0-9._~@+-]+$/.test(segment);
+  });
 }
 
 /**
@@ -179,25 +186,38 @@ function extractPathTokens(text) {
 function resolveStartDir(token, projectRoot) {
   if (!token || typeof token !== 'string') return null;
 
-  const abs = path.resolve(projectRoot || process.cwd(), token);
-
-  // Only trigger for paths within the project
-  if (projectRoot && abs !== projectRoot && !abs.startsWith(projectRoot + path.sep)) return null;
+  const baseDir = projectRoot || process.cwd();
+  const abs = path.resolve(baseDir, token);
 
   let stats;
+  let realAbs;
+  let realProjectRoot = projectRoot;
   try {
     stats = fs.statSync(abs);
+    realAbs = fs.realpathSync(abs);
+    if (projectRoot) {
+      realProjectRoot = fs.realpathSync(projectRoot);
+    }
   } catch {
     return null;
   }
 
+  // Only trigger for paths whose real target stays within the project
+  if (
+    realProjectRoot &&
+    realAbs !== realProjectRoot &&
+    !realAbs.startsWith(realProjectRoot + path.sep)
+  ) {
+    return null;
+  }
+
   let dir;
-  if (stats.isDirectory()) dir = abs;
-  else if (stats.isFile()) dir = path.dirname(abs);
+  if (stats.isDirectory()) dir = realAbs;
+  else if (stats.isFile()) dir = path.dirname(realAbs);
   else return null;
 
   // Skip project root — already loaded via CLAUDE.md → @AGENTS.md
-  if (dir === projectRoot) return null;
+  if (dir === realProjectRoot) return null;
 
   return dir;
 }
