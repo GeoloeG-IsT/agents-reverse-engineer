@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Claude/Gemini hooks no longer crash under a `"type": "commonjs"` package.json** — `are-context-loader` and `are-check-update` are ES modules but shipped with a `.js` extension, so any `.claude/package.json` declaring `"type": "commonjs"` (written by e.g. the get-shit-done installer) made Node parse them as CommonJS and fail with `SyntaxError: Cannot use import statement outside a module`, silently disabling nested `AGENTS.md` injection and the update check. The hooks are now installed as `are-context-loader.mjs` / `are-check-update.mjs`, which Node always treats as ESM (fixes #17)
+- **Installer migrates `.js` hook installs** — `registerHooks()` rewrites existing `settings.json` entries that reference the old `.js` filenames (Claude and Gemini), collapses duplicates, and deletes the superseded ARE-generated `.js` hook files; uninstall also cleans up both the current and legacy filenames
+
+### Changed
+- **`scripts/build-hooks.js` bundles `.mjs` hooks** and prunes stale files from `hooks/dist/` so renamed hooks are not shipped twice
+
 ## [1.2.20] - 2026-09-11
 
 ### Changed

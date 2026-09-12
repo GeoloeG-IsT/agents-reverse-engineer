@@ -9,7 +9,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/are-check-update.js"
+            "command": "node .claude/hooks/are-check-update.mjs"
           }
         ]
       }
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/are-context-loader.js"
+            "command": "node .claude/hooks/are-context-loader.mjs"
           }
         ]
       }

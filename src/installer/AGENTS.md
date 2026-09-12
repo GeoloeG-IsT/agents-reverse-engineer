@@ -41,12 +41,12 @@ Interactive TTY wizard and non-interactive CLI for installing agents-reverse-eng
 
 **Claude hooks**:
 - Command format: `node .claude/hooks/{filename}`
-- SessionStart: `[{ type: 'command', command: 'node .claude/hooks/are-check-update.js' }]`
-- PostToolUse (matcher: `Read`): `[{ type: 'command', command: 'node .claude/hooks/are-context-loader.js' }]`
+- SessionStart: `[{ type: 'command', command: 'node .claude/hooks/are-check-update.mjs' }]`
+- PostToolUse (matcher: `Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task`): `[{ type: 'command', command: 'node .claude/hooks/are-context-loader.mjs' }]`
 
 **Gemini hooks**:
 - Command format: `node .gemini/hooks/{filename}`
-- SessionStart only: `[{ name: 'are-check-update', type: 'command', command: 'node .gemini/hooks/are-check-update.js' }]`
+- SessionStart only: `[{ name: 'are-check-update', type: 'command', command: 'node .gemini/hooks/are-check-update.mjs' }]`
 
 **Claude permissions** (from operations.ts `ARE_PERMISSIONS`):
 ```
@@ -117,7 +117,7 @@ cache=.agents-reverse-engineer/.npm-cache
 - .npmrc section delimiters: `# BEGIN agents-reverse-engineer`, `# END agents-reverse-engineer`
 
 ### Uninstall Cleanup Constants (from uninstall.ts)
-- Hook filenames: `are-context-loader.js`, `are-check-update.js`, `are-session-end.js`
+- Hook filenames: `are-context-loader.mjs`, `are-check-update.mjs` (current); `are-context-loader.js`, `are-check-update.js`, `are-session-end.js` (legacy, migrated/removed on install and uninstall)
 - Plugin filenames: `are-check-update.js` (OpenCode plugins/)
 - Agent filename: `are-summarizer.md` (OpenCode agents/, must match ai/backends/opencode.ts `OPENCODE_AGENT_NAME`)
 - Codex rules filename: `are.rules`

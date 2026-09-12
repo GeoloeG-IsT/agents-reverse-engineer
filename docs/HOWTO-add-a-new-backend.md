@@ -435,7 +435,7 @@ Create `hooks/goose-are-check-update.js` that:
 3. Caches the result to avoid repeated network calls
 4. Outputs a message if an update is available
 
-See `hooks/are-check-update.js` (Claude) and `hooks/opencode-are-check-update.js` for reference implementations.
+See `hooks/are-check-update.mjs` (Claude) and `hooks/opencode-are-check-update.js` for reference implementations.
 
 ### Build integration
 
