@@ -117,7 +117,7 @@ cache=.agents-reverse-engineer/.npm-cache
 - .npmrc section delimiters: `# BEGIN agents-reverse-engineer`, `# END agents-reverse-engineer`
 
 ### Uninstall Cleanup Constants (from uninstall.ts)
-- Hook filenames: `are-context-loader.mjs`, `are-check-update.mjs` (current); `are-context-loader.js`, `are-check-update.js`, `are-session-end.js` (legacy, migrated/removed on install and uninstall)
+- Hook filenames: `are-context-loader.mjs`, `are-check-update.mjs` (current); `are-context-loader.js`, `are-check-update.js` (legacy, migrated/removed on install and uninstall); `are-session-end.js` (legacy, removed on uninstall)
 - Plugin filenames: `are-check-update.js` (OpenCode plugins/)
 - Agent filename: `are-summarizer.md` (OpenCode agents/, must match ai/backends/opencode.ts `OPENCODE_AGENT_NAME`)
 - Codex rules filename: `are.rules`
