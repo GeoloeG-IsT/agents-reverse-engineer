@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.21] - 2026-09-12
+
 ### Fixed
 - **Claude/Gemini hooks no longer crash under a `"type": "commonjs"` package.json** — `are-context-loader` and `are-check-update` are ES modules but shipped with a `.js` extension, so any `.claude/package.json` declaring `"type": "commonjs"` (written by e.g. the get-shit-done installer) made Node parse them as CommonJS and fail with `SyntaxError: Cannot use import statement outside a module`, silently disabling nested `AGENTS.md` injection and the update check. The hooks are now installed as `are-context-loader.mjs` / `are-check-update.mjs`, which Node always treats as ESM (fixes #17)
 - **Installer migrates `.js` hook installs** — `registerHooks()` rewrites existing `settings.json` entries that reference the old `.js` filenames (Claude and Gemini), collapses duplicates, and deletes the superseded ARE-generated `.js` hook files; uninstall also cleans up both the current and legacy filenames
@@ -1208,7 +1210,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Binary file detection and exclusion
 - Token budget management for AI-friendly output
 
-[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.20...HEAD
+[Unreleased]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.21...HEAD
+[1.2.21]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.20...v1.2.21
 [1.2.20]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.19...v1.2.20
 [1.2.19]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.18...v1.2.19
 [1.2.18]: https://github.com/GeoloeG-IsT/agents-reverse-engineer/compare/v1.2.17...v1.2.18
