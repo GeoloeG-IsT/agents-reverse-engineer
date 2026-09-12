@@ -232,7 +232,7 @@ function shouldWriteManagedFile(filePath: string, marker: string, force: boolean
  *
  * Hooks are bundled in hooks/dist/ during npm prepublishOnly.
  *
- * @param hookName - Name of the hook file (e.g., 'are-context-loader.js')
+ * @param hookName - Name of the hook file (e.g., 'are-context-loader.mjs')
  * @returns Absolute path to the bundled hook file
  */
 function getBundledHookPath(hookName: string): string {
@@ -366,8 +366,8 @@ function installFilesForRuntime(
       const hookContent = readBundledHook(hookDef.filename);
       const shouldUpgradeContextLoader =
         upgradeClaudeContextLoaderHook &&
-        hookDef.filename === 'are-context-loader.js' &&
-        shouldUpgradeManagedHookFile(hookPath, hookContent, ARE_CONTEXT_LOADER_MARKER);
+        hookDef.name === 'are-context-loader' &&
+        shouldUpgradeManagedHookFile(hookPath, hookContent, hookDef.marker);
 
       if (existsSync(hookPath) && !options.force && !shouldUpgradeContextLoader) {
         filesSkipped.push(hookPath);
@@ -384,6 +384,11 @@ function installFilesForRuntime(
           filesCreated.push(hookPath);
         }
       }
+
+      // Delete superseded hook files from older installs (e.g. the ESM `.js`
+      // hooks shipped by <=1.2.20 that crash under a `"type": "commonjs"`
+      // package.json — see #17). Only ARE-generated files are removed.
+      removeLegacyHookFiles(basePath, hookDef, options.dryRun, errors);
     }
 
     // Register hooks in settings.json
@@ -555,27 +560,54 @@ interface GeminiSettingsJson {
 
 const ARE_CONTEXT_LOADER_MATCHER = 'Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task';
 const ARE_CONTEXT_LOADER_MARKER = 'ARE Context Loader Hook';
+const ARE_CHECK_UPDATE_MARKER = 'ARE Update Check Hook';
 
 /**
  * Hook definitions for ARE (Claude only — Gemini skips PostToolUse hooks)
+ *
+ * Hook files ship as `.mjs` so Node always parses them as ES modules. With a
+ * `.js` extension the nearest package.json decides the module format, and a
+ * `"type": "commonjs"` there (written by e.g. the get-shit-done installer into
+ * `.claude/package.json`) made the hooks crash on load with
+ * "Cannot use import statement outside a module" (#17).
  */
 interface HookDefinition {
   event: 'SessionStart' | 'PostToolUse';
   filename: string;
   name: string;
+  /** Header comment identifying ARE-generated copies of this hook */
+  marker: string;
   /** Regex matcher for tool-scoped hooks (PostToolUse) */
   matcher?: string;
+  /** Filenames used by older installers; migrated to `filename` on install */
+  legacyFilenames: string[];
 }
 
 const ARE_HOOKS: HookDefinition[] = [
-  { event: 'SessionStart', filename: 'are-check-update.js', name: 'are-check-update' },
+  {
+    event: 'SessionStart',
+    filename: 'are-check-update.mjs',
+    name: 'are-check-update',
+    marker: ARE_CHECK_UPDATE_MARKER,
+    legacyFilenames: ['are-check-update.js'],
+  },
   {
     event: 'PostToolUse',
-    filename: 'are-context-loader.js',
+    filename: 'are-context-loader.mjs',
     name: 'are-context-loader',
+    marker: ARE_CONTEXT_LOADER_MARKER,
     matcher: ARE_CONTEXT_LOADER_MATCHER,
+    legacyFilenames: ['are-context-loader.js'],
   },
 ];
+
+function getHookCommand(runtimeDir: string, filename: string): string {
+  return `node ${runtimeDir}/hooks/${filename}`;
+}
+
+function getLegacyHookCommands(runtimeDir: string, hookDef: HookDefinition): string[] {
+  return hookDef.legacyFilenames.map((filename) => getHookCommand(runtimeDir, filename));
+}
 
 function hasStaleClaudeContextLoaderMatcher(basePath: string): boolean {
   const settingsPath = path.join(basePath, 'settings.json');
@@ -585,17 +617,81 @@ function hasStaleClaudeContextLoaderMatcher(basePath: string): boolean {
 
   try {
     const settings = (parse(readFileSync(settingsPath, 'utf-8')) ?? {}) as SettingsJson;
-    const hookCommand = 'node .claude/hooks/are-context-loader.js';
+    const hookDef = ARE_HOOKS.find((def) => def.name === 'are-context-loader')!;
+    const hookCommands = [
+      getHookCommand('.claude', hookDef.filename),
+      ...getLegacyHookCommands('.claude', hookDef),
+    ];
     return (
       settings.hooks?.PostToolUse?.some(
         (event) =>
           event.matcher !== ARE_CONTEXT_LOADER_MATCHER &&
-          event.hooks?.some((hook) => hook.command === hookCommand),
+          event.hooks?.some((hook) => hookCommands.includes(hook.command)),
       ) ?? false
     );
   } catch {
     return false;
   }
+}
+
+/**
+ * Delete ARE-generated hook files installed under a superseded filename.
+ *
+ * Deleted paths are deliberately not reported as created files: they no
+ * longer exist, so installation verification must not look for them.
+ */
+function removeLegacyHookFiles(
+  basePath: string,
+  hookDef: HookDefinition,
+  dryRun: boolean,
+  errors: string[],
+): void {
+  for (const legacyFilename of hookDef.legacyFilenames) {
+    const legacyPath = path.join(basePath, 'hooks', legacyFilename);
+    if (!existsSync(legacyPath)) {
+      continue;
+    }
+
+    let isManaged = false;
+    try {
+      isManaged = readFileSync(legacyPath, 'utf-8').includes(hookDef.marker);
+    } catch {
+      isManaged = false;
+    }
+    if (!isManaged) {
+      continue;
+    }
+
+    if (!dryRun) {
+      try {
+        unlinkSync(legacyPath);
+      } catch (err) {
+        errors.push(`Failed to delete legacy hook ${legacyPath}: ${err}`);
+      }
+    }
+  }
+}
+
+/**
+ * Point settings entries that still reference a legacy hook filename at the
+ * current one. Entries are rewritten in place so their position and any
+ * unrelated sibling commands are preserved.
+ *
+ * @returns true if any command was rewritten
+ */
+function migrateLegacyHookCommands(
+  hooks: Array<{ command: string }>,
+  legacyCommands: string[],
+  hookCommand: string,
+): boolean {
+  let migrated = false;
+  for (const hook of hooks) {
+    if (legacyCommands.includes(hook.command)) {
+      hook.command = hookCommand;
+      migrated = true;
+    }
+  }
+  return migrated;
 }
 
 function shouldUpgradeManagedHookFile(
@@ -668,9 +764,11 @@ export function registerHooks(
 /**
  * Register ARE hooks in Claude Code settings.json format
  *
- * Adds missing hooks and upgrades stale matchers on existing entries (e.g. an
- * are-context-loader installed by <=1.2.19 still carrying `matcher: "Read"`),
- * without broadening unrelated commands that happen to share the same event.
+ * Adds missing hooks, migrates entries that still point at legacy hook
+ * filenames (the `.js` hooks installed by <=1.2.20, see #17), and upgrades
+ * stale matchers on existing entries (e.g. an are-context-loader installed by
+ * <=1.2.19 still carrying `matcher: "Read"`), without broadening unrelated
+ * commands that happen to share the same event.
  */
 function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: boolean): boolean {
   // Load or create settings (JSONC-aware)
@@ -693,18 +791,51 @@ function registerClaudeHooks(settingsPath: string, runtimeDir: string, dryRun: b
   let changedAny = false;
 
   for (const hookDef of ARE_HOOKS) {
-    const hookCommand = `node ${runtimeDir}/hooks/${hookDef.filename}`;
+    const hookCommand = getHookCommand(runtimeDir, hookDef.filename);
+    const legacyCommands = getLegacyHookCommands(runtimeDir, hookDef);
 
     // Ensure event array exists
     if (!settings.hooks[hookDef.event]) {
       settings.hooks[hookDef.event] = [];
     }
+    const events = settings.hooks[hookDef.event]!;
+
+    // Migrate entries registered under a legacy filename, then collapse any
+    // duplicates so the hook is registered exactly once.
+    let seenCurrent = false;
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
+      if (!event.hooks) {
+        continue;
+      }
+      if (migrateLegacyHookCommands(event.hooks, legacyCommands, hookCommand)) {
+        changedAny = true;
+      }
+      const beforeDedupe = event.hooks.length;
+      event.hooks = event.hooks.filter((hook) => {
+        if (hook.command !== hookCommand) {
+          return true;
+        }
+        if (seenCurrent) {
+          return false;
+        }
+        seenCurrent = true;
+        return true;
+      });
+      if (event.hooks.length !== beforeDedupe) {
+        changedAny = true;
+      }
+      if (event.hooks.length === 0) {
+        events.splice(i, 1);
+        i--;
+      }
+    }
 
     // Look up an existing entry (by command string match)
-    const existingIndex = settings.hooks[hookDef.event]!.findIndex((event) =>
+    const existingIndex = events.findIndex((event) =>
       event.hooks?.some((h) => h.command === hookCommand),
     );
-    const existing = existingIndex >= 0 ? settings.hooks[hookDef.event]![existingIndex] : undefined;
+    const existing = existingIndex >= 0 ? events[existingIndex] : undefined;
 
     if (!existing) {
       // Define our hook (Claude format: nested hooks array, optional matcher for PostToolUse)
@@ -849,17 +980,23 @@ function registerGeminiHooks(settingsPath: string, runtimeDir: string, dryRun: b
     settings.hooks = {};
   }
 
-  let addedAny = false;
+  let changedAny = false;
 
   for (const hookDef of ARE_HOOKS) {
     // Gemini only supports SessionStart hooks
     if (hookDef.event !== 'SessionStart') continue;
 
-    const hookCommand = `node ${runtimeDir}/hooks/${hookDef.filename}`;
+    const hookCommand = getHookCommand(runtimeDir, hookDef.filename);
+    const legacyCommands = getLegacyHookCommands(runtimeDir, hookDef);
 
     // Ensure event array exists
     if (!settings.hooks[hookDef.event]) {
       settings.hooks[hookDef.event] = [];
+    }
+
+    // Migrate entries registered under a legacy filename (see #17)
+    if (migrateLegacyHookCommands(settings.hooks[hookDef.event]!, legacyCommands, hookCommand)) {
+      changedAny = true;
     }
 
     // Check if hook already exists (by command string match)
@@ -873,11 +1010,11 @@ function registerGeminiHooks(settingsPath: string, runtimeDir: string, dryRun: b
         command: hookCommand,
       };
       settings.hooks[hookDef.event]!.push(newHook);
-      addedAny = true;
+      changedAny = true;
     }
   }
 
-  if (!addedAny) {
+  if (!changedAny) {
     return false;
   }
 

@@ -12,7 +12,7 @@ Shell scripts, VHS demo recorders, and build tooling for project maintenance, CI
 - [fake-npx.sh](./fake-npx.sh) — Simulates npx "Ok to proceed?" prompt for VHS recordings, execs `/home/pascal/wks/agents-reverse-engineer/dist/cli/index.js` after user confirmation
 
 **Build & Maintenance**
-- [build-hooks.js](./build-hooks.js) — Copies `.js` files from `hooks/` to `hooks/dist/` for npm packaging, invoked via `prepublishOnly` lifecycle
+- [build-hooks.js](./build-hooks.js) — Copies `.js`/`.mjs` hook files from `hooks/` to `hooks/dist/` (pruning stale outputs) for npm packaging, invoked via `prepublishOnly` lifecycle
 - [generate-circle-frames.js](./generate-circle-frames.js) — Generates 36 ASCII art frames (`frame_1.txt`–`frame_36.txt`) of rotating hollow circle with orbiting highlight using Gaussian falloff (spread=0.8), exports `GOLDEN_CIRCLE_FRAMES`, `FRAME_WIDTH` (16), `FRAME_HEIGHT` (6) to `src/installer/frames/index.ts`
 
 **Analysis**
@@ -57,7 +57,7 @@ Shell scripts, VHS demo recorders, and build tooling for project maintenance, CI
 
 **File Patterns**
 - Exclude from analysis: `*/node_modules/*`, `*/.git/*`, dot-directories (`grep -v "^\./\."`)
-- Hook source: `hooks/*.js` (excluding `dist`)
+- Hook source: `hooks/*.js` and `hooks/*.mjs` (excluding `dist`)
 - Frame output: `src/installer/frames/frame_{1..36}.txt` + `index.ts`
 
 **Stat Command Fallbacks**

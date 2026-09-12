@@ -6,8 +6,8 @@ You've mastered agents-reverse-engineer (ARE) individually. Now make it a team t
 
 ARE ships with three hooks that run automatically during AI sessions:
 
-- **are-check-update.js** (SessionStart): Checks npm for newer ARE versions in the background, caches results. Pin a team version by committing `.claude/ARE-VERSION` to your repo.
-- **are-context-loader.js** (PostToolUse): Injects parent `AGENTS.md` into context whenever your AI reads a file. Your assistant automatically understands the broader architecture.
+- **are-check-update.mjs** (SessionStart): Checks npm for newer ARE versions in the background, caches results. Pin a team version by committing `.claude/ARE-VERSION` to your repo.
+- **are-context-loader.mjs** (PostToolUse): Injects parent `AGENTS.md` into context whenever your AI reads a file. Your assistant automatically understands the broader architecture.
 - **are-session-end.js** (SessionEnd): Detects git changes via `git status --porcelain` and runs `are update --quiet` in the background. Documentation stays fresh without manual intervention.
 
 All hooks use detached spawning (`child.unref()`) so they never block your session. Disable with `ARE_DISABLE_HOOK=1` or `hook_enabled: false` in config.

@@ -6,10 +6,10 @@ Runtime integration layer providing background update checks and context injecti
 
 ## Contents
 
-### [are-check-update.js](./are-check-update.js)
+### [are-check-update.mjs](./are-check-update.mjs)
 SessionStart hook that spawns detached child process via `spawn(process.execPath, ['-e', inlineScript])` to check `npm view agents-reverse-engineer version` and cache results to `~/.claude/cache/are-update-check.json`.
 
-### [are-context-loader.js](./are-context-loader.js)
+### [are-context-loader.mjs](./are-context-loader.mjs)
 PostToolUse hook (matcher `Read|Edit|Write|MultiEdit|NotebookEdit|Bash|Agent|Task`) that derives start directories from `tool_input.file_path`/`notebook_path` or scans them out of Bash `command` and Agent/Task `prompt`/`description` strings, walks each directory tree up to `data.cwd`, loads ARE-generated AGENTS.md files parent-first, and injects them as `additionalContext` with session-scoped deduplication via `${os.tmpdir()}/are-context-loader/${session_id}.json`.
 
 ### [opencode-are-check-update.js](./opencode-are-check-update.js)
@@ -17,15 +17,17 @@ OpenCode plugin exporting `AreCheckUpdate(ctx)` factory triggering on `session.c
 
 ## Architecture
 
+Claude/Gemini hooks ship as `.mjs` so Node always parses them as ES modules, regardless of any `"type": "commonjs"` in the nearest `package.json` (e.g. `.claude/package.json` written by get-shit-done). OpenCode plugins stay `.js`.
+
 Hooks execute as extension points in editor lifecycles:
-1. **SessionStart/session.created**: `are-check-update.js` and `opencode-are-check-update.js` fire asynchronous npm version checks on session initialization
-2. **PostToolUse**: `are-context-loader.js` intercepts file read operations, traverses directories upward to inject relevant AGENTS.md documentation
+1. **SessionStart/session.created**: `are-check-update.mjs` and `opencode-are-check-update.js` fire asynchronous npm version checks on session initialization
+2. **PostToolUse**: `are-context-loader.mjs` intercepts file read operations, traverses directories upward to inject relevant AGENTS.md documentation
 
 ## File Relationships
 
-- `are-check-update.js` targets Claude Desktop SDK SessionStart event, reads `.claude/ARE-VERSION` files
+- `are-check-update.mjs` targets Claude Desktop SDK SessionStart event, reads `.claude/ARE-VERSION` files
 - `opencode-are-check-update.js` implements OpenCode plugin contract, reads `.opencode/ARE-VERSION` and `~/.config/opencode/ARE-VERSION` files
-- `are-context-loader.js` depends on PostToolUse event payloads containing `data.cwd` plus either `tool_input.file_path`/`notebook_path` or scannable `tool_input.command` (Bash) / `tool_input.prompt` (Agent, Task) text
+- `are-context-loader.mjs` depends on PostToolUse event payloads containing `data.cwd` plus either `tool_input.file_path`/`notebook_path` or scannable `tool_input.command` (Bash) / `tool_input.prompt` (Agent, Task) text
 
 Both update checkers use identical cache format: `{update_available: boolean, installed: string, latest: string, checked: number}`.
 

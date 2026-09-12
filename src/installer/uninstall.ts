@@ -52,9 +52,12 @@ interface HookDefinition {
 }
 
 const ARE_HOOKS: HookDefinition[] = [
-  // Current
+  // Current (must match operations.ts)
+  { event: 'PostToolUse', filename: 'are-context-loader.mjs' },
+  { event: 'SessionStart', filename: 'are-check-update.mjs' },
+  // Legacy (for cleaning up old installations): <=1.2.20 shipped the ESM
+  // hooks with a .js extension (see #17)
   { event: 'PostToolUse', filename: 'are-context-loader.js' },
-  // Legacy (for cleaning up old installations)
   { event: 'SessionStart', filename: 'are-check-update.js' },
   { event: 'SessionEnd', filename: 'are-session-end.js' },
 ];
